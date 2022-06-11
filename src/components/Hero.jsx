@@ -1,7 +1,8 @@
 import React from "react";
-import { chakra, GridItem, useColorModeValue, Stack, Text, Flex } from "@chakra-ui/react";
-
+import { chakra, GridItem, useColorModeValue,Button, Stack, Text, Flex } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 function Hero() {
+  const navigate=useNavigate();
   return (
     <GridItem
       colSpan={{ sm: 3, md: 5, lg: 7 }}
@@ -65,6 +66,7 @@ function Hero() {
           WHAT YOU THINK.
         </chakra.p>
       </Flex>
+      <Button onClick={()=>navigate("home")} size="lg" mt="1rem" colorScheme="brand">Get Started</Button>
     </GridItem>
   );
 }

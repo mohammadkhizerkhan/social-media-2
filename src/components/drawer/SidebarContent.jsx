@@ -49,7 +49,7 @@ function SidebarContent(props) {
           color={useColorModeValue("brand.500", "white")}
           fontWeight="bold"
         >
-         AMIGOS
+          AMIGOS
         </Text>
       </Flex>
       <Flex
@@ -124,17 +124,13 @@ function SidebarContent(props) {
           p={4}
           mt={4}
           cursor="pointer"
-          color={useColorModeValue("inherit", "gray.400")}
-          _hover={{
-            bg: useColorModeValue("gray.100", "gray.900"),
-            color: useColorModeValue("gray.900", "gray.200"),
-          }}
-          role="group"
+          color={useColorModeValue("gray.200", "gray.800")}
           fontWeight="semibold"
           transition=".15s ease"
-          fontSize="1xl"
+          size="lg"
           borderRadius="3xl"
           onClick={onOpen}
+          colorScheme="brand"
         >
           Add a Post
         </Button>
@@ -145,12 +141,19 @@ function SidebarContent(props) {
             <ModalCloseButton />
             <ModalBody>
               <HStack alignItems="start">
-              <Avatar name="ryan" src="https://bit.ly/ryan-florence" size="sm" />
-              <Textarea placeholder='Here is a sample placeholder' minHeight="120px"/>
+                <Avatar
+                  name="ryan"
+                  src="https://bit.ly/ryan-florence"
+                  size="sm"
+                />
+                <Textarea
+                  placeholder="Here is a sample placeholder"
+                  minHeight="120px"
+                />
               </HStack>
             </ModalBody>
             <ModalFooter p="10px">
-              <Button colorScheme="blue" mr={3} >
+              <Button colorScheme="brand" mr={3}>
                 Post
               </Button>
             </ModalFooter>

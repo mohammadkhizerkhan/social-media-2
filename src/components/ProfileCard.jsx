@@ -111,7 +111,7 @@ function ProfileCard() {
                     </HStack>
                   </ModalBody>
                   <ModalFooter p="10px">
-                    <Button colorScheme="blue" mr={3}>
+                    <Button colorScheme="brand" mr={3}>
                       SAVE
                     </Button>
                   </ModalFooter>
