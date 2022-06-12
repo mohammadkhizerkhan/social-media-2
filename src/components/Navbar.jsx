@@ -1,10 +1,8 @@
 import React from "react";
 import {
-  Avatar,
   Box,
   Flex,
   Icon,
-  IconButton,
   Input,
   InputGroup,
   InputLeftElement,
@@ -13,11 +11,13 @@ import {
   Button,
   useDisclosure,
 } from "@chakra-ui/react";
-import { FaBell } from "react-icons/fa";
-import { FiMenu, FiSearch } from "react-icons/fi";
+
 import { MdOutlineSearch } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../features/auth/AuthSlice";
 function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
+  const dispatch=useDispatch();
   return (
     <Box
       as="header"
@@ -39,16 +39,24 @@ function Navbar() {
           <InputLeftElement color="gray.500">
             <Icon as={MdOutlineSearch} w="25px" h="25px" mt="8px" />
           </InputLeftElement>
-          <Input w="full" size="lg" bg={useColorModeValue("white", "gray.800")} placeholder="Search for articles..." />
+          <Input
+            w="full"
+            size="lg"
+            bg={useColorModeValue("white", "gray.800")}
+            placeholder="Search for articles..."
+          />
         </InputGroup>
         <Button
           onClick={toggleColorMode}
           colorScheme="brand"
           py={2}
-          type="button"
           mr={4}
+          type="button"
         >
           {colorMode === "light" ? "dark mode" : "light mode"}
+        </Button>
+        <Button colorScheme="brand" py={2} mr={4} onClick={()=>dispatch(logoutUser())}>
+          logout
         </Button>
       </Flex>
     </Box>
