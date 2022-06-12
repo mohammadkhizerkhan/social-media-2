@@ -43,6 +43,9 @@ function LoginForm() {
       password: "",
     });
   }
+  const testLoginHandler=()=>{
+    dispatch(loginUser({email:"test@mail.com",password:"test123"}))
+  }
   useEffect(() => {
     token && navigate("/home") 
   }, [token])
@@ -96,6 +99,9 @@ function LoginForm() {
 
           <Button colorScheme="brand" w="full" py={2} type="button" onClick={()=>loginHandler()}>
             LOG IN
+          </Button>
+          <Button variant="link" onClick={() => testLoginHandler()}>
+            Login with test credentials
           </Button>
           <Button variant="link" onClick={() => navigate("/")}>
             Create a new account
