@@ -61,7 +61,7 @@ const authSlice=createSlice({
         },
         [signUpUser.rejected]:(state,action)=>{
             state.error=action.payload;
-            CallToast("error",action.payload.message)
+            CallToast("error",action.payload.response.status===422 && "User email is already present.")
         },
         [loginUser.pending]:(state)=>{
             console.log(state)
@@ -75,7 +75,7 @@ const authSlice=createSlice({
         },
         [loginUser.rejected]:(state,action)=>{
             state.error=action.payload;
-            CallToast("error",action.payload.message)
+            CallToast("error",action.payload.response.status===404 && "User is not registered, Please SignUp")
         }
     }
 })

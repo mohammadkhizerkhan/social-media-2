@@ -22,7 +22,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { AiFillGift } from "react-icons/ai";
 import { MdHome, MdOutlineBookmark, MdExplore } from "react-icons/md";
 import NavItem from "./components/NavItem";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 function SidebarContent(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -44,13 +44,13 @@ function SidebarContent(props) {
       {...props}
     >
       <Flex px="4" py="5" align="center">
-        <Text
-          fontSize="5xl"
-          color={useColorModeValue("brand.500", "white")}
-          fontWeight="bold"
-        >
-          AMIGOS
-        </Text>
+          <Text
+            fontSize="5xl"
+            color={useColorModeValue("brand.500", "white")}
+            fontWeight="bold"
+          >
+            AMIGOS
+          </Text>
       </Flex>
       <Flex
         direction="column"
