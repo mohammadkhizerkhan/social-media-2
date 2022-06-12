@@ -42,6 +42,7 @@ const authSlice=createSlice({
         logoutUser:()=>{
             localStorage.removeItem("token")
             localStorage.removeItem("user")
+            CallToast("sucess","Logged out Successfully")
             return {
                 token:null,
                 user:null
