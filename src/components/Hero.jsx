@@ -1,8 +1,19 @@
 import React from "react";
-import { chakra, GridItem, useColorModeValue,Button, Stack, Text, Flex } from "@chakra-ui/react";
+import {
+  chakra,
+  GridItem,
+  useColorModeValue,
+  Button,
+  Stack,
+  Text,
+  Flex,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { CallToast } from "../services/CallToast";
 function Hero() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const { token } = useSelector((store) => store.auth);
   return (
     <GridItem
       colSpan={{ sm: 3, md: 5, lg: 7 }}
@@ -20,7 +31,7 @@ function Hero() {
       </chakra.h1>
       <Flex direction={["column", "row"]}>
         <chakra.h1
-          mb={{base:"10px",md:"1rem"}}
+          mb={{ base: "10px", md: "1rem" }}
           fontSize={{ base: "3xl", md: "4xl" }}
           fontWeight="bold"
           lineHeight={{ base: "shorter", md: "none" }}
@@ -30,13 +41,17 @@ function Hero() {
         >
           FOLLOW
         </chakra.h1>
-        <chakra.h1 alignSelf="center" marginTop={{base:"10px",md:"0"}} marginBottom={{base:"1rem",md:"0px"}}>
+        <chakra.h1
+          alignSelf="center"
+          marginTop={{ base: "10px", md: "0" }}
+          marginBottom={{ base: "1rem", md: "0px" }}
+        >
           PEOPLE AROUND THE GLOBE.
         </chakra.h1>
       </Flex>
       <Flex direction={["column", "row"]}>
         <chakra.h1
-           mb={{base:"10px",md:"1rem"}}
+          mb={{ base: "10px", md: "1rem" }}
           fontSize={{ base: "3xl", md: "4xl" }}
           fontWeight="bold"
           lineHeight={{ base: "shorter", md: "none" }}
@@ -46,13 +61,17 @@ function Hero() {
         >
           CONNECT
         </chakra.h1>
-        <chakra.p alignSelf="center" marginTop={{base:"10px",md:"0"}} marginBottom={{base:"1rem",md:"0px"}}>
+        <chakra.p
+          alignSelf="center"
+          marginTop={{ base: "10px", md: "0" }}
+          marginBottom={{ base: "1rem", md: "0px" }}
+        >
           WITH YOUR FRIENDS.
         </chakra.p>
       </Flex>
-      <Flex direction={["column", "row"]} >
+      <Flex direction={["column", "row"]}>
         <chakra.h1
-           mb={{base:"10px",md:"1rem"}}
+          mb={{ base: "10px", md: "1rem" }}
           fontSize={{ base: "3xl", md: "4xl" }}
           fontWeight="bold"
           lineHeight={{ base: "shorter", md: "none" }}
@@ -62,11 +81,24 @@ function Hero() {
         >
           SHARE
         </chakra.h1>
-        <chakra.p alignSelf="center" marginTop={{base:"10px",md:"0"}} marginBottom={{base:"1rem",md:"0px"}}>
+        <chakra.p
+          alignSelf="center"
+          marginTop={{ base: "10px", md: "0" }}
+          marginBottom={{ base: "1rem", md: "0px" }}
+        >
           WHAT YOU THINK.
         </chakra.p>
       </Flex>
-      <Button onClick={()=>navigate("home")} size="lg" mt="1rem" colorScheme="brand">Get Started</Button>
+      <Button
+        onClick={() =>
+          token ? navigate("/home") : CallToast("error", "Please Login")
+        }
+        size="lg"
+        mt="1rem"
+        colorScheme="brand"
+      >
+        Get Started
+      </Button>
     </GridItem>
   );
 }
