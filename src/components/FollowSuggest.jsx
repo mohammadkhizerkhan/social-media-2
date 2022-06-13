@@ -12,9 +12,11 @@ import {
   Avatar,
   HStack,
 } from "@chakra-ui/react";
-import {MdAdd} from "react-icons/md"
+import { MdAdd } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 function FollowSuggest() {
+  const { allUsers } = useSelector((store) => store.user);
   return (
     <>
       <VStack
@@ -23,7 +25,6 @@ function FollowSuggest() {
         top="0"
         right={20}
         zIndex="sticky"
-        
         h="full"
         p="4"
         overflowX="hidden"
@@ -39,18 +40,29 @@ function FollowSuggest() {
           Who to follow
         </Heading>
         <Divider />
-        <HStack w="full">
-          <Avatar name="ryan" src="https://bit.ly/ryan-florence" />
-          <VStack alignItems="start">
-            <Heading as="h6" size="10px">
-              ryan florence
-            </Heading>
-            <Text mt={0}>ryan123</Text>
-          </VStack>
-          <Button leftIcon={<MdAdd />} colorScheme="brand" variant="solid" size="xs" px="10px">
-            Follow
-          </Button>
-        </HStack>
+        {allUsers.map((user) => {
+          const {firstName,lastName}=user
+          return (
+            <HStack w="full">
+              <Avatar name="ryan" src="https://bit.ly/ryan-florence" />
+              <VStack alignItems="start">
+                <Heading as="h6" size="10px">
+                  {firstName} {lastName}
+                </Heading>
+                <Text mt={0}>@{firstName}</Text>
+              </VStack>
+              <Button
+                leftIcon={<MdAdd />}
+                colorScheme="brand"
+                variant="solid"
+                size="xs"
+                px="10px"
+              >
+                Follow
+              </Button>
+            </HStack>
+          );
+        })}
       </VStack>
     </>
   );

@@ -4,10 +4,10 @@ import { PostCard, ProfileCard } from "../components";
 import { useColorModeValue } from "@chakra-ui/react";
 function Profile() {
   return (
-    <Box as="main" p="4"  bg={useColorModeValue("#F9FAFB", "gray.600")}>
-      <ProfileCard/>
-      <PostCard/> 
-      <PostCard/> 
+    <Box as="main" p="4" bg={useColorModeValue("#F9FAFB", "gray.600")}>
+      <ProfileCard />
+      {/* <PostCard/> 
+      <PostCard/>  */}
     </Box>
   );
 }

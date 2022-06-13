@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 
 const initialState = {
   token: localStorage.getItem("token") || null,
-  user: localStorage.getItem("user") || null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
 };
 
 export const signUpUser = createAsyncThunk(
