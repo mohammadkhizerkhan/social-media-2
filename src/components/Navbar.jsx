@@ -11,6 +11,7 @@ import {
   Button,
   useDisclosure,
 } from "@chakra-ui/react";
+import {useNavigate} from "react-router-dom"
 
 import { MdOutlineSearch } from "react-icons/md";
 import { useDispatch } from "react-redux";
@@ -18,6 +19,7 @@ import { logoutUser } from "../features/auth/AuthSlice";
 function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
   const dispatch=useDispatch();
+  const navigate=useNavigate();
   return (
     <Box
       as="header"
@@ -55,7 +57,7 @@ function Navbar() {
         >
           {colorMode === "light" ? "dark mode" : "light mode"}
         </Button>
-        <Button colorScheme="brand" py={2} mr={4} onClick={()=>dispatch(logoutUser())}>
+        <Button colorScheme="brand" py={2} mr={4} onClick={()=>dispatch(logoutUser({navigate}))}>
           logout
         </Button>
       </Flex>

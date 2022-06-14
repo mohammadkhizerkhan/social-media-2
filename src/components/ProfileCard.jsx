@@ -34,6 +34,7 @@ import { useSelector } from "react-redux";
 function ProfileCard() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {user}=useSelector(store=>store.auth)
+  console.log(user)
   return (
     <Flex w="full" alignItems="center" justifyContent="center" mt={4}>
       <Box
@@ -51,14 +52,14 @@ function ProfileCard() {
             <Avatar name="ryan" src="https://bit.ly/ryan-florence" size="lg" />
             <VStack alignItems="center" justifyContent="center">
               <Heading as="h4" size="50px">
-                {user.firstName} {user.lastName}
+                {user?.firstName} {user?.lastName}
               </Heading>
               <p
                 marginTop="0px"
                 fontSize="sm"
                 color={useColorModeValue("gray.600", "gray.400")}
               >
-                @{user.firstName}
+                @{user?.firstName}
               </p>
               <Button
                 w="fit-content"
@@ -124,7 +125,7 @@ function ProfileCard() {
                 mt={2}
                 color={useColorModeValue("gray.600", "gray.300")}
               >
-                {user.bio}
+                {user?.bio}
               </chakra.p>
               <Flex w="full" justifyContent="center">
                 <Button variant="link" mr="20px">
