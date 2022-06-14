@@ -22,7 +22,6 @@ function FollowSuggest() {
   const { user } = useSelector((store) => store.auth);
   let suggestUser = allUsers.filter((item) => item.username !== user.username);
   suggestUser=suggestUser.filter((ele) => !user.following.some((ele2) => ele2._id === ele._id))
-  console.log(user);
 
   const dispatch = useDispatch();
   return (

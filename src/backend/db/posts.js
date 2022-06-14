@@ -50,12 +50,12 @@ export const posts = [
       likedBy: [],
       dislikedBy: [],
     },
-    username: "salman@mail.com",
+    username: "test@mail.com",
     bookmark: [],
     comments: [
       {
         _id: uuid(),
-        username: "test@mail.com",
+        username: "salman@mail.com",
         text: "Interesting",
         votes: {
           upvotedBy: [],
@@ -84,7 +84,7 @@ export const posts = [
       likedBy: [],
       dislikedBy: [],
     },
-    username: "sharukh@mail.com",
+    username: "test@mail.com",
     bookmark: [],
     comments: [
       {

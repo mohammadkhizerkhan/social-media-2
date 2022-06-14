@@ -34,7 +34,7 @@ import { useSelector } from "react-redux";
 function ProfileCard() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {user}=useSelector(store=>store.auth)
-  console.log(user)
+  const {userPost}=useSelector(store=>store.post)
   return (
     <Flex w="full" alignItems="center" justifyContent="center" mt={4}>
       <Box
@@ -129,13 +129,13 @@ function ProfileCard() {
               </chakra.p>
               <Flex w="full" justifyContent="center">
                 <Button variant="link" mr="20px">
-                  5 Posts
+                  {userPost.length} Posts
                 </Button>
                 <Button variant="link" mr="20px">
-                  3 Followers
+                  {user.followers.length} followers
                 </Button>
                 <Button variant="link" mr="20px">
-                  5 Following
+                  {user.following.length} following
                 </Button>
               </Flex>
               <Link

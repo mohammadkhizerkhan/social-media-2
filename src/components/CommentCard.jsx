@@ -27,7 +27,7 @@ function CommentCard({ comment }) {
         borderRadius="5px"
         color={useColorModeValue("gray.600", "gray.300")}
       >
-        <Button variant="link" display="block" color="blackAlpha.800" fontWeight="bold">{userDetails?.firstName} {userDetails?.lastName}</Button>
+        <Button variant="link" display="block" fontWeight="bold">{userDetails?.firstName} {userDetails?.lastName}</Button>
         {text}
       </Box>
     </HStack>

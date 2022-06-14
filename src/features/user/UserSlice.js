@@ -25,7 +25,7 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: {
     [getAllUsers.pending]: (state) => {
-      console.log(state);
+      // console.log(state);
     },
     [getAllUsers.fulfilled]: (state, action) => {
       state.allUsers = action.payload.users;
