@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -13,10 +13,18 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { MdAdd } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { followUser } from "../features/auth/AuthSlice";
 
 function FollowSuggest() {
+  // const [suggestUser, setSuggestUser] = useState([]);
   const { allUsers } = useSelector((store) => store.user);
+  const { user } = useSelector((store) => store.auth);
+  let suggestUser = allUsers.filter((item) => item.username !== user.username);
+  suggestUser=suggestUser.filter((ele) => !user.following.some((ele2) => ele2._id === ele._id))
+  console.log(user);
+
+  const dispatch = useDispatch();
   return (
     <>
       <VStack
@@ -40,8 +48,8 @@ function FollowSuggest() {
           Who to follow
         </Heading>
         <Divider />
-        {allUsers.map((user) => {
-          const {firstName,lastName}=user
+        {suggestUser.map((user) => {
+          const { firstName, lastName } = user;
           return (
             <HStack w="full">
               <Avatar name="ryan" src="https://bit.ly/ryan-florence" />
@@ -57,6 +65,14 @@ function FollowSuggest() {
                 variant="solid"
                 size="xs"
                 px="10px"
+                onClick={() =>
+                  dispatch(
+                    followUser({
+                      userId: user._id,
+                      dispatch,
+                    })
+                  )
+                }
               >
                 Follow
               </Button>
