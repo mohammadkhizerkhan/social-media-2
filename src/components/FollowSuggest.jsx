@@ -40,7 +40,7 @@ function FollowSuggest() {
         borderColor={useColorModeValue("inherit", "gray.700")}
         borderLeftWidth="1px"
         // mt={8}
-        w={60}
+        w="16.5rem"
         display={{ base: "none", md: "unset" }}
       >
         <Heading as="h1" size="10px" mb="5px">
@@ -50,7 +50,7 @@ function FollowSuggest() {
         {suggestUser.map((user) => {
           const { firstName, lastName, userId } = user;
           return (
-            <HStack w="full" key={user._id}>
+            <HStack w="full" key={user._id} justifyContent='space-between'>
               <Avatar
                 onClick={() => navigate(`/user-profile/${userId}`)}
                 cursor="pointer"
@@ -58,15 +58,18 @@ function FollowSuggest() {
                 src="https://bit.ly/ryan-florence"
               />
               <VStack alignItems="start">
-                <Button
+                <Text
                   variant="link"
                   onClick={() => navigate(`/user-profile/${userId}`)}
                   cursor="pointer"
                   as="h6"
                   size="10px"
+                  whiteSpace="nowrap"
+                  overflow="none"
+                  textOverflow="ellipsis"
                 >
                   {firstName} {lastName}
-                </Button>
+                </Text>
                 <Text mt={0}>@{userId}</Text>
               </VStack>
               <Button
