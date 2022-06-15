@@ -2,17 +2,14 @@ import React from "react";
 import {
   chakra,
   Box,
-  Image,
   Avatar,
   Flex,
   useColorModeValue,
-  Link,
   Input,
   Text,
   Button,
   VStack,
   HStack,
-  Heading,
   InputRightElement,
   InputGroup,
   Icon,
@@ -27,7 +24,7 @@ export default function PostCard({ post }) {
  const navigate= useNavigate();
   const {allUsers} = useSelector(store => store.user)
   const {user}=useSelector(store=>store.auth)
-  const { comments, content, username, likes,userId } = post;
+  const { comments, content, username,userId } = post;
   const userDetails=allUsers.find(user=>user.username===username)
   return (
     <Flex w="full" alignItems="center" justifyContent="center" mt={4}>

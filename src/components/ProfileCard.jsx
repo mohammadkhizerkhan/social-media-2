@@ -19,14 +19,9 @@ import {
   ModalBody,
   ModalCloseButton,
   Textarea,
-  InputGroup,
-  InputLeftElement,
-  visuallyHidden,
-  Checkbox,
   FormLabel,
   SimpleGrid,
   Input,
-  VisuallyHidden,
   FormControl,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
