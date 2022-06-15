@@ -8,13 +8,12 @@ function Profile() {
   const dispatch = useDispatch()
   const {user}=useSelector(store=>store.auth)
   const {userPost}=useSelector(store=>store.post)
-  console.log(userPost)
   useEffect(() => {
     dispatch(getUserPost(user.username))
   }, [])
   return (
     <Box as="main" p="4" bg={useColorModeValue("#F9FAFB", "gray.600")}>
-      <ProfileCard />
+      <ProfileCard user={user} userPost={userPost}/>
       {
         userPost.length?
           userPost.map(postItem=>{
@@ -24,8 +23,6 @@ function Profile() {
           })
         :<Center>Please add some Posts</Center>
       }
-      {/* <PostCard/> 
-      <PostCard/>  */}
     </Box>
   );
 }

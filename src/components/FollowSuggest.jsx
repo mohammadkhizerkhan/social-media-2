@@ -15,11 +15,13 @@ import {
 import { MdAdd } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { followUser } from "../features/auth/AuthSlice";
+import { useNavigate } from "react-router-dom";
 
 function FollowSuggest() {
   // const [suggestUser, setSuggestUser] = useState([]);
   const { allUsers } = useSelector((store) => store.user);
   const { user } = useSelector((store) => store.auth);
+ const navigate= useNavigate()
   let suggestUser = allUsers.filter((item) => item.username !== user.username);
   suggestUser=suggestUser.filter((ele) => !user.following.some((ele2) => ele2._id === ele._id))
 
@@ -48,15 +50,15 @@ function FollowSuggest() {
         </Heading>
         <Divider />
         {suggestUser.map((user) => {
-          const { firstName, lastName } = user;
+          const { firstName, lastName,userId } = user;
           return (
-            <HStack w="full">
-              <Avatar name="ryan" src="https://bit.ly/ryan-florence" />
+            <HStack w="full" key={user._id}>
+              <Avatar onClick={()=>navigate(`/user-profile/${userId}`)} cursor="pointer" name="ryan" src="https://bit.ly/ryan-florence" />
               <VStack alignItems="start">
-                <Heading as="h6" size="10px">
+                <Button variant="link" onClick={()=>navigate(`/user-profile/${userId}`)} cursor="pointer" as="h6" size="10px">
                   {firstName} {lastName}
-                </Heading>
-                <Text mt={0}>@{firstName}</Text>
+                </Button>
+                <Text mt={0}>@{userId}</Text>
               </VStack>
               <Button
                 leftIcon={<MdAdd />}

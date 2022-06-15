@@ -31,10 +31,8 @@ import {
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 
-function ProfileCard() {
+function ProfileCard({user,userPost}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {user}=useSelector(store=>store.auth)
-  const {userPost}=useSelector(store=>store.post)
   return (
     <Flex w="full" alignItems="center" justifyContent="center" mt={4}>
       <Box
@@ -129,13 +127,13 @@ function ProfileCard() {
               </chakra.p>
               <Flex w="full" justifyContent="center">
                 <Button variant="link" mr="20px">
-                  {userPost.length} Posts
+                  {userPost?.length} Posts
                 </Button>
                 <Button variant="link" mr="20px">
-                  {user.followers.length} followers
+                  {user?.followers?.length} followers
                 </Button>
                 <Button variant="link" mr="20px">
-                  {user.following.length} following
+                  {user?.following?.length} following
                 </Button>
               </Flex>
               <Link

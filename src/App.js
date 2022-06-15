@@ -8,6 +8,7 @@ import {
   Login,
   Profile,
   Saved,
+  IndividualProfile
 } from "./pages";
 import Mockman from "mockman-js";
 import { ToastContainer } from "react-toastify";
@@ -50,6 +51,7 @@ function App() {
             <Route path="/explore" element={<Explore />} />
             <Route path="/saved" element={<Saved />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/user-profile/:userId" element={<IndividualProfile />} />
           </Route>
         </Route>
       </Routes>
