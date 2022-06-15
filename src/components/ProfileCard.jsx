@@ -87,7 +87,6 @@ function ProfileCard({ user, userPost }) {
                         })
                       );
                 }}
-                // onClick={()=>console.log("click")}
                 display={mainUser.username === user.username ? "none" : "block"}
               >
                 {isFollowing ? "- Unfollow" : "+ Follow"}

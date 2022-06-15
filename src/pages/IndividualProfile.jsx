@@ -32,7 +32,7 @@ function IndividualProfile() {
     })();
   }, [user, mainUser, userId]);
   return (
-    <Box as="main" p="4" bg={useColorModeValue("#F9FAFB", "gray.600")}>
+    <Box as="main" minH="100vh" p="4" bg={useColorModeValue("#F9FAFB", "gray.600")}>
       <ProfileCard user={user} userPost={userPost} />
       {userPost.length ? (
         userPost.map((postItem) => {
@@ -46,8 +46,7 @@ function IndividualProfile() {
             py={4}
             rounded="lg"
             shadow="lg"
-            //   bg={useColorModeValue("white", "gray.800")}
-            bg="gray.800"
+            bg="gray.500"
             w="full"
             maxW="41rem"
           >
