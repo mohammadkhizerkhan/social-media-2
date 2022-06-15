@@ -21,10 +21,13 @@ import { MdOutlineBookmarkBorder, MdOutlineMoreVert } from "react-icons/md";
 import { IoHeartOutline } from "react-icons/io5";
 import CommentCard from "./CommentCard";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function PostCard({ post }) {
+ const navigate= useNavigate();
   const {allUsers} = useSelector(store => store.user)
-  const { comments, content, username, likes } = post;
+  const {user}=useSelector(store=>store.auth)
+  const { comments, content, username, likes,userId } = post;
   const userDetails=allUsers.find(user=>user.username===username)
   return (
     <Flex w="full" alignItems="center" justifyContent="center" mt={4}>
@@ -40,9 +43,9 @@ export default function PostCard({ post }) {
       >
         <Flex justifyContent="space-between" alignItems="center">
           <HStack w="full">
-            <Avatar name="ryan" src="https://bit.ly/ryan-florence" />
+            <Avatar cursor="pointer" onClick={()=>navigate(`/user-profile/${userId}`)} name="ryan" src="https://bit.ly/ryan-florence" />
             <VStack alignItems="start" justifyContent="center">
-              <Heading as="h6" size="10px">
+              <Button variant="link" cursor="pointer" as="h6" size="10px" onClick={()=>navigate(`/user-profile/${userId}`)}>
                 {userDetails?.firstName} {userDetails?.lastName}
                 <chakra.span
                   ml="4px"
@@ -51,7 +54,7 @@ export default function PostCard({ post }) {
                 >
                   @{userDetails?.firstName}
                 </chakra.span>
-              </Heading>
+              </Button>
               <Text
                 mt={0}
                 fontSize="sm"
@@ -61,7 +64,7 @@ export default function PostCard({ post }) {
               </Text>
             </VStack>
           </HStack>
-          <Button borderRadius="50%" w="20px" mr="10px">
+          <Button display={post.username===user.username?"flex":"none"} borderRadius="50%" w="20px" mr="10px">
             <Icon as={MdOutlineMoreVert} w="22px" h="22px" />
           </Button>
         </Flex>

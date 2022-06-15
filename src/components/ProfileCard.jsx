@@ -29,10 +29,15 @@ import {
   VisuallyHidden,
   FormControl,
 } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { followUser, unFollowUser } from "../features/auth/AuthSlice";
 
-function ProfileCard({user,userPost}) {
+function ProfileCard({ user, userPost }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const dispatch = useDispatch();
+  const { user: mainUser } = useSelector((store) => store.auth);
+
+  const isFollowing = mainUser.following.find(item=>item.userId===user.userId)
   return (
     <Flex w="full" alignItems="center" justifyContent="center" mt={4}>
       <Box
@@ -47,7 +52,7 @@ function ProfileCard({user,userPost}) {
       >
         <Flex justifyContent="space-between" alignItems="center">
           <VStack w="full" alignItems="center">
-            <Avatar name="ryan" src="https://bit.ly/ryan-florence" size="lg" />
+            <Avatar  name="ryan" src="https://bit.ly/ryan-florence" size="lg" />
             <VStack alignItems="center" justifyContent="center">
               <Heading as="h4" size="50px">
                 {user?.firstName} {user?.lastName}
@@ -65,8 +70,32 @@ function ProfileCard({user,userPost}) {
                 px="25px"
                 mr="10px"
                 onClick={onOpen}
+                display={mainUser.username === user.username ? "block" : "none"}
               >
                 Edit Profile
+              </Button>
+              <Button
+                w="fit-content"
+                borderRadius="4px"
+                px="25px"
+                mr="10px"
+                onClick={() => {
+                  isFollowing
+                    ? dispatch(
+                        unFollowUser({
+                          userId: user._id,
+                        })
+                      )
+                    : dispatch(
+                        followUser({
+                          userId: user._id,
+                        })
+                      );
+                }}
+                // onClick={()=>console.log("click")}
+                display={mainUser.username === user.username ? "none" : "block"}
+              >
+                {isFollowing ? "- Unfollow" : "+ Follow"}
               </Button>
               <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
@@ -76,7 +105,7 @@ function ProfileCard({user,userPost}) {
                   <ModalBody>
                     <HStack alignItems="start">
                       <SimpleGrid
-                      w="full"
+                        w="full"
                         columns={1}
                         px={6}
                         py={4}

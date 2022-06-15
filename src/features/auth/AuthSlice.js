@@ -67,7 +67,7 @@ export const updateUser = createAsyncThunk(
 
 export const followUser = createAsyncThunk(
   "user/followUser",
-  async ({ userId, dispatch }, thunkAPI) => {
+  async ({ userId }, thunkAPI) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
@@ -85,9 +85,10 @@ export const followUser = createAsyncThunk(
     }
   }
 );
+
 export const unFollowUser = createAsyncThunk(
   "user/followUser",
-  async ({ userId, dispatch }, thunkAPI) => {
+  async ({ userId }, thunkAPI) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(

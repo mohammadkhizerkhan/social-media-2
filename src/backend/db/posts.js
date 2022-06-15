@@ -17,6 +17,7 @@ export const posts = [
       dislikedBy: [],
     },
     username: "salman@mail.com",
+    userId:"salman123",
     bookmark: [],
     comments: [
       {
@@ -51,6 +52,7 @@ export const posts = [
       dislikedBy: [],
     },
     username: "test@mail.com",
+    userId:"test123",
     bookmark: [],
     comments: [
       {
@@ -85,6 +87,7 @@ export const posts = [
       dislikedBy: [],
     },
     username: "test@mail.com",
+    userId:"test123",
     bookmark: [],
     comments: [
       {
@@ -119,6 +122,7 @@ export const posts = [
       dislikedBy: [],
     },
     username: "test@mail.com",
+    userId:"test123",
     bookmark: [],
     comments: [
       {
@@ -153,6 +157,42 @@ export const posts = [
       dislikedBy: [],
     },
     username: "test@mail.com",
+    userId:"test123",
+    bookmark: [],
+    comments: [
+      {
+        _id: uuid(),
+        username: "salman@mail.com",
+        text: "Interesting",
+        votes: {
+          upvotedBy: [],
+          downvotedBy: [],
+        },
+      },
+      {
+        _id: uuid(),
+        username: "sharukh@mail.com",
+        text: "Wow!",
+        votes: {
+          upvotedBy: [],
+          downvotedBy: [],
+        },
+      },
+    ],
+    createdAt: formatDate(),
+    updatedAt: formatDate(),
+  },
+  {
+    _id: uuid(),
+    content:
+      "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident,",
+    likes: {
+      likeCount: 0,
+      likedBy: [],
+      dislikedBy: [],
+    },
+    username: "sharukh@mail.com",
+    userId:"sharukh123",
     bookmark: [],
     comments: [
       {

@@ -15,7 +15,6 @@ export const getAllPosts=createAsyncThunk("post/getAllPosts",async(_,thunkAPI)=>
     }
 })
 export const getUserPost=createAsyncThunk("post/getUserPost",async(username,thunkAPI)=>{
-    console.log(username)
     try {
         const response=await axios.get(`/api/posts/user/${username}`);
         return response.data;
