@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -23,8 +23,22 @@ import { AiFillGift } from "react-icons/ai";
 import { MdHome, MdOutlineBookmark, MdExplore } from "react-icons/md";
 import NavItem from "./components/NavItem";
 import { Link, NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { createPost } from "../../features/post/PostSlice";
+import { CallToast } from "../../services/CallToast";
+import { getPostHandler } from "../../backend/controllers/PostController";
 function SidebarContent(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [postData, setPostData] = useState({ content: "" });
+  const dispatch = useDispatch();
+  const getPostHandler = () => {
+    if (postData.content) {
+      dispatch(createPost(postData));
+      setPostData({ content: "" })
+    } else {
+      CallToast("error", "Please write something");
+    }
+  };
   return (
     <Box
       as="nav"
@@ -44,13 +58,13 @@ function SidebarContent(props) {
       {...props}
     >
       <Flex px="4" py="5" align="center">
-          <Text
-            fontSize="5xl"
-            color={useColorModeValue("brand.500", "white")}
-            fontWeight="bold"
-          >
-            AMIGOS
-          </Text>
+        <Text
+          fontSize="5xl"
+          color={useColorModeValue("brand.500", "white")}
+          fontWeight="bold"
+        >
+          AMIGOS
+        </Text>
       </Flex>
       <Flex
         direction="column"
@@ -147,13 +161,24 @@ function SidebarContent(props) {
                   size="sm"
                 />
                 <Textarea
-                  placeholder="Here is a sample placeholder"
+                  placeholder="write something here..."
                   minHeight="120px"
+                  value={postData.content}
+                  onChange={(e) =>
+                    setPostData((prev) => ({
+                      ...prev,
+                      content: e.target.value,
+                    }))
+                  }
                 />
               </HStack>
             </ModalBody>
             <ModalFooter p="10px">
-              <Button colorScheme="brand" mr={3}>
+              <Button
+                colorScheme="brand"
+                mr={3}
+                onClick={() => getPostHandler()}
+              >
                 Post
               </Button>
             </ModalFooter>
