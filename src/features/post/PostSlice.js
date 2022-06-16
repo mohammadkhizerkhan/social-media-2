@@ -61,6 +61,23 @@ export const deletePost = createAsyncThunk(
   }
 );
 
+export const editPost = createAsyncThunk(
+  "post/editpost",
+  async ({postData,postId},thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `/api/posts/edit/${postId}`,
+        {postData},
+        { headers: { authorization: token } }
+      );
+      return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error)
+    }
+  }
+);
+
 const postSlice = createSlice({
   name: "post",
   initialState,
@@ -100,6 +117,15 @@ const postSlice = createSlice({
       state.allPost = action.payload.posts;
     },
     [deletePost.rejected]: (state, action) => {
+      console.log(action.payload);
+    },
+    [editPost.pending]: (state) => {
+      // console.log(state)
+    },
+    [editPost.fulfilled]: (state, action) => {
+      state.allPost = action.payload.posts;
+    },
+    [editPost.rejected]: (state, action) => {
       console.log(action.payload);
     },
   },

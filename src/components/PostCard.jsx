@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   chakra,
   Box,
@@ -18,20 +18,31 @@ import {
   MenuList,
   MenuItem,
   IconButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  Textarea,
+  ModalFooter,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { MdOutlineBookmarkBorder, MdOutlineMoreVert } from "react-icons/md";
 import { IoHeartOutline } from "react-icons/io5";
 import CommentCard from "./CommentCard";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deletePost } from "../features/post/PostSlice";
+import { deletePost, editPost } from "../features/post/PostSlice";
 
 export default function PostCard({ post }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const { allUsers } = useSelector((store) => store.user);
   const { user } = useSelector((store) => store.auth);
-  const dispatch = useDispatch()
-  const { comments, content, username, userId,_id } = post;
+  const dispatch = useDispatch();
+  const { comments, content, username, userId, _id } = post;
+  const [postData, setPostData] = useState({ content: content });
   const userDetails = allUsers.find((user) => user.username === username);
   return (
     <Flex w="full" alignItems="center" justifyContent="center" mt={4}>
@@ -90,8 +101,10 @@ export default function PostCard({ post }) {
               display={post.username === user.username ? "flex" : "none"}
             />
             <MenuList>
-              <MenuItem >Edit</MenuItem>
-              <MenuItem onClick={()=>dispatch(deletePost(_id))}>Delete</MenuItem>
+              <MenuItem onClick={onOpen}>Edit</MenuItem>
+              <MenuItem onClick={() => dispatch(deletePost(_id))}>
+                Delete
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>
@@ -136,6 +149,46 @@ export default function PostCard({ post }) {
           </VStack>
         </Box>
       </Box>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add a post</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <HStack alignItems="start">
+              <Avatar
+                name="ryan"
+                src="https://bit.ly/ryan-florence"
+                size="sm"
+              />
+              <Textarea
+                placeholder="write something here..."
+                minHeight="120px"
+                value={postData.content}
+                onChange={(e) =>
+                  setPostData((prev) => ({
+                    ...prev,
+                    content: e.target.value,
+                  }))
+                }
+              />
+            </HStack>
+          </ModalBody>
+          <ModalFooter p="10px">
+            <Button
+              colorScheme="brand"
+              mr={3}
+              disabled={content === postData.content ? true : false}
+              onClick={() => {
+                dispatch(editPost({ postData, postId: _id }));
+                onClose();
+              }}
+            >
+              Update
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 }
