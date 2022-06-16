@@ -28,23 +28,36 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@chakra-ui/react";
-import { MdOutlineBookmarkBorder, MdOutlineMoreVert } from "react-icons/md";
-import { IoHeartOutline,IoHeartSharp } from "react-icons/io5";
+import {
+  MdOutlineBookmarkBorder,
+  MdOutlineMoreVert,
+  MdOutlineBookmark,
+} from "react-icons/md";
+import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 import CommentCard from "./CommentCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deletePost, dislikePost, editPost, likePost } from "../features/post/PostSlice";
+import {
+  addPostToBookmark,
+  deletePost,
+  dislikePost,
+  editPost,
+  likePost,
+  removePostFromBookmark,
+} from "../features/post/PostSlice";
 
 export default function PostCard({ post }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const { allUsers } = useSelector((store) => store.user);
   const { user } = useSelector((store) => store.auth);
+  const { userBookmarks } = useSelector((store) => store.post);
   const dispatch = useDispatch();
-  const { comments, content, username, userId, _id, likes } = post;
+  const { comments, content, username, userId, _id, likes, bookmark } = post;
   const [postData, setPostData] = useState({ content: content });
   const userDetails = allUsers.find((user) => user.username === username);
-  const isLiked=likes.likedBy.some((like) => like.username === user.username)
+  const isLiked = likes.likedBy.some((like) => like.username === user.username);
+  const isBookmarked = userBookmarks.some((bookmark) => bookmark._id === _id);
   return (
     <Flex w="full" alignItems="center" justifyContent="center" mt={4}>
       <Box
@@ -120,15 +133,28 @@ export default function PostCard({ post }) {
             w="20px"
             mr="10px"
             onClick={() =>
-              isLiked
-                ? dispatch(dislikePost(_id))
-                : dispatch(likePost(_id))
+              isLiked ? dispatch(dislikePost(_id)) : dispatch(likePost(_id))
             }
           >
-            <Icon as={isLiked?IoHeartSharp:IoHeartOutline} w="22px" h="22px"/><span px="10px">{likes.likeCount}</span>
+            <Icon
+              as={isLiked ? IoHeartSharp : IoHeartOutline}
+              w="22px"
+              h="22px"
+            />
+            <span px="10px">{likes.likeCount}</span>
           </Button>
-          <Button borderRadius="50%" w="20px">
-            <Icon as={MdOutlineBookmarkBorder} w="22px" h="22px" />
+          <Button
+            borderRadius="50%"
+            w="20px"
+            onClick={() =>
+              isBookmarked ? dispatch(removePostFromBookmark(_id)) : dispatch(addPostToBookmark(_id))
+            }
+          >
+            <Icon
+              as={isBookmarked ? MdOutlineBookmark : MdOutlineBookmarkBorder}
+              w="22px"
+              h="22px"
+            />
           </Button>
         </Flex>
         <Box mt={2}>

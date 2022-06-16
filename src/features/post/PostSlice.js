@@ -4,6 +4,7 @@ import axios from "axios";
 const initialState = {
   allPost: [],
   userPost: [],
+  userBookmarks:[]
 };
 
 export const getAllPosts = createAsyncThunk(
@@ -87,9 +88,9 @@ export const likePost = createAsyncThunk(
         {},
         { headers: { authorization: token } }
       );
-      return response.data
+      return response.data;
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
   }
 );
@@ -103,9 +104,43 @@ export const dislikePost = createAsyncThunk(
         {},
         { headers: { authorization: token } }
       );
-      return response.data
+      return response.data;
     } catch (error) {
-        console.log(error)
+      console.log(error);
+    }
+  }
+);
+
+export const addPostToBookmark = createAsyncThunk(
+  "post/addPostToBookmark",
+  async (postId, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `/api/users/bookmark/${postId}`,
+        {},
+        { headers: { authorization: token } }
+      );
+      console.log(response.data)
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const removePostFromBookmark = createAsyncThunk(
+  "post/removePostFromBookmark",
+  async (postId, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `/api/users/remove-bookmark/${postId}`,
+        {},
+        { headers: { authorization: token } }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
     }
   }
 );
@@ -176,6 +211,24 @@ const postSlice = createSlice({
       state.allPost = action.payload.posts;
     },
     [dislikePost.rejected]: (state, action) => {
+      console.log(action.payload);
+    },
+    [addPostToBookmark.pending]: (state) => {
+      // console.log(state)
+    },
+    [addPostToBookmark.fulfilled]: (state, action) => {
+      state.userBookmarks = action.payload.bookmarks;
+    },
+    [addPostToBookmark.rejected]: (state, action) => {
+      console.log(action.payload);
+    },
+    [removePostFromBookmark.pending]: (state) => {
+      // console.log(state)
+    },
+    [removePostFromBookmark.fulfilled]: (state, action) => {
+      state.userBookmarks = action.payload.bookmarks;
+    },
+    [removePostFromBookmark.rejected]: (state, action) => {
       console.log(action.payload);
     },
   },

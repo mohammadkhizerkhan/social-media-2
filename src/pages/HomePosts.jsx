@@ -16,7 +16,7 @@ function HomePosts() {
     );
   }, [user, allPost]);
   return (
-    <Box as="main" p="4" bg={useColorModeValue("#F9FAFB", "gray.600")}>
+    <Box as="main" p="4" minH="100vh" bg={useColorModeValue("#F9FAFB", "gray.600")}>
       {feedPosts.length ? (
         feedPosts.map((postItem) => {
           return <PostCard key={postItem.id} post={postItem} />;
@@ -33,6 +33,7 @@ function HomePosts() {
             bg="gray.800"
             w="full"
             maxW="41rem"
+            
           >
             <Center>Please follow some peoples or post something.</Center>
           </Box>
