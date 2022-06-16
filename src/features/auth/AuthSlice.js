@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { CallToast } from "../../services/CallToast";
-import { Navigate } from "react-router-dom";
 
 const initialState = {
-  token: localStorage.getItem("token") || null,
-  user: localStorage.getItem("user") || null,
+  isLoading:false,
+  token: localStorage.getItem("token") || "",
+  user: JSON.parse(localStorage.getItem("user")) || {},
+  error:""
 };
 
 export const signUpUser = createAsyncThunk(
@@ -40,18 +41,83 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async (userData, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "/api/users/edit",
+        {
+          userData,
+        },
+        {
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  }
+);
+
+
+export const followUser = createAsyncThunk(
+  "user/followUser",
+  async ({ userId }, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `/api/users/follow/${userId}`,
+        {},
+        {
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const unFollowUser = createAsyncThunk(
+  "user/followUser",
+  async ({ userId }, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `/api/users/unfollow/${userId}`,
+        {},
+        {
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logoutUser: () => {
+    logoutUser: (state,action) => {
+      state.user={};
+      state.token="";
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       CallToast("success", "Logged out Successfully");
-      return {
-        token: null,
-        user: null,
-      };
+      action.payload.navigate("/login")
     },
   },
   extraReducers: {
@@ -91,6 +157,36 @@ const authSlice = createSlice({
           ? "User is not registered, Please SignUp"
           : action.payload.response.status === 401 && "invalid credentials"
       );
+    },
+    // [updateUser.pending]: (state) => {
+    //   console.log(state);
+    // },
+    // [updateUser.fulfilled]: (state, action) => {
+    //   state.user = action.payload;
+    //   localStorage.setItem("user", JSON.stringify(state.user));
+    // },
+    // [updateUser.rejected]: (state, action) => {
+    //   state.error = action.payload;
+    // },
+    [followUser.pending]: (state) => {
+      state.isLoading=true;
+    },
+    [followUser.fulfilled]: (state, action) => {
+      state.isLoading=false;
+      state.user=action.payload.user;
+    },
+    [followUser.rejected]: (state, action) => {
+      state.error=action.payload
+    },
+    [unFollowUser.pending]: (state) => {
+      state.isLoading=true;
+    },
+    [unFollowUser.fulfilled]: (state, action) => {
+      state.isLoading=false;
+      state.user=action.payload.user;
+    },
+    [unFollowUser.rejected]: (state, action) => {
+      state.error=action.payload
     },
   },
 });

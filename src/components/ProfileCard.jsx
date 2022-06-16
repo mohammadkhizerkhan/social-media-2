@@ -19,19 +19,20 @@ import {
   ModalBody,
   ModalCloseButton,
   Textarea,
-  InputGroup,
-  InputLeftElement,
-  visuallyHidden,
-  Checkbox,
   FormLabel,
   SimpleGrid,
   Input,
-  VisuallyHidden,
   FormControl,
 } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { followUser, unFollowUser } from "../features/auth/AuthSlice";
 
-function ProfileCard() {
+function ProfileCard({ user, userPost }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const dispatch = useDispatch();
+  const { user: mainUser } = useSelector((store) => store.auth);
+
+  const isFollowing = mainUser.following.find(item=>item.userId===user.userId)
   return (
     <Flex w="full" alignItems="center" justifyContent="center" mt={4}>
       <Box
@@ -41,21 +42,22 @@ function ProfileCard() {
         rounded="lg"
         shadow="lg"
         bg={useColorModeValue("white", "gray.800")}
-        maxW="1xl"
+        w="full"
+        maxW="80%"
       >
         <Flex justifyContent="space-between" alignItems="center">
           <VStack w="full" alignItems="center">
-            <Avatar name="ryan" src="https://bit.ly/ryan-florence" size="lg" />
+            <Avatar  name="ryan" src="https://bit.ly/ryan-florence" size="lg" />
             <VStack alignItems="center" justifyContent="center">
               <Heading as="h4" size="50px">
-                ryan florence
+                {user?.firstName} {user?.lastName}
               </Heading>
               <p
                 marginTop="0px"
                 fontSize="sm"
                 color={useColorModeValue("gray.600", "gray.400")}
               >
-                @ryan123
+                @{user?.firstName}
               </p>
               <Button
                 w="fit-content"
@@ -63,8 +65,31 @@ function ProfileCard() {
                 px="25px"
                 mr="10px"
                 onClick={onOpen}
+                display={mainUser.username === user.username ? "block" : "none"}
               >
                 Edit Profile
+              </Button>
+              <Button
+                w="fit-content"
+                borderRadius="4px"
+                px="25px"
+                mr="10px"
+                onClick={() => {
+                  isFollowing
+                    ? dispatch(
+                        unFollowUser({
+                          userId: user._id,
+                        })
+                      )
+                    : dispatch(
+                        followUser({
+                          userId: user._id,
+                        })
+                      );
+                }}
+                display={mainUser.username === user.username ? "none" : "block"}
+              >
+                {isFollowing ? "- Unfollow" : "+ Follow"}
               </Button>
               <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
@@ -74,7 +99,7 @@ function ProfileCard() {
                   <ModalBody>
                     <HStack alignItems="start">
                       <SimpleGrid
-                      w="full"
+                        w="full"
                         columns={1}
                         px={6}
                         py={4}
@@ -121,18 +146,17 @@ function ProfileCard() {
                 mt={2}
                 color={useColorModeValue("gray.600", "gray.300")}
               >
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Tempora
+                {user?.bio}
               </chakra.p>
               <Flex w="full" justifyContent="center">
                 <Button variant="link" mr="20px">
-                  5 Posts
+                  {userPost?.length} Posts
                 </Button>
                 <Button variant="link" mr="20px">
-                  3 Followers
+                  {user?.followers?.length} followers
                 </Button>
                 <Button variant="link" mr="20px">
-                  5 Following
+                  {user?.following?.length} following
                 </Button>
               </Flex>
               <Link
