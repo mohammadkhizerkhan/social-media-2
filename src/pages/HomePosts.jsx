@@ -15,7 +15,6 @@ function HomePosts() {
       )
     );
   }, [user, allPost]);
-  console.log(feedPosts);
   return (
     <Box as="main" p="4" bg={useColorModeValue("#F9FAFB", "gray.600")}>
       {feedPosts.length ? (

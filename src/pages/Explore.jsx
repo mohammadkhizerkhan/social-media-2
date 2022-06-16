@@ -5,7 +5,7 @@ import { useColorModeValue } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 function Explore() {
   const { allPost } = useSelector((store) => store.post);
-  
+  console.log(allPost)
  return (
     <Box as="main" p="4" bg={useColorModeValue("#F9FAFB", "gray.600")}>
       {allPost.map((postItem) => {

@@ -29,11 +29,11 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { MdOutlineBookmarkBorder, MdOutlineMoreVert } from "react-icons/md";
-import { IoHeartOutline } from "react-icons/io5";
+import { IoHeartOutline,IoHeartSharp } from "react-icons/io5";
 import CommentCard from "./CommentCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deletePost, editPost } from "../features/post/PostSlice";
+import { deletePost, dislikePost, editPost, likePost } from "../features/post/PostSlice";
 
 export default function PostCard({ post }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -41,9 +41,10 @@ export default function PostCard({ post }) {
   const { allUsers } = useSelector((store) => store.user);
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
-  const { comments, content, username, userId, _id } = post;
+  const { comments, content, username, userId, _id, likes } = post;
   const [postData, setPostData] = useState({ content: content });
   const userDetails = allUsers.find((user) => user.username === username);
+  const isLiked=likes.likedBy.some((like) => like.username === user.username)
   return (
     <Flex w="full" alignItems="center" justifyContent="center" mt={4}>
       <Box
@@ -114,8 +115,17 @@ export default function PostCard({ post }) {
           </chakra.p>
         </Box>
         <Flex justifyContent="start" alignItems="center" mt={4}>
-          <Button borderRadius="50%" w="20px" mr="10px">
-            <Icon as={IoHeartOutline} w="22px" h="22px" />
+          <Button
+            // borderRadius="50%"
+            w="20px"
+            mr="10px"
+            onClick={() =>
+              isLiked
+                ? dispatch(dislikePost(_id))
+                : dispatch(likePost(_id))
+            }
+          >
+            <Icon as={isLiked?IoHeartSharp:IoHeartOutline} w="22px" h="22px"/><span px="10px">{likes.likeCount}</span>
           </Button>
           <Button borderRadius="50%" w="20px">
             <Icon as={MdOutlineBookmarkBorder} w="22px" h="22px" />
