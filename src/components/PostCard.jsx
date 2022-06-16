@@ -13,19 +13,26 @@ import {
   InputRightElement,
   InputGroup,
   Icon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
 } from "@chakra-ui/react";
 import { MdOutlineBookmarkBorder, MdOutlineMoreVert } from "react-icons/md";
 import { IoHeartOutline } from "react-icons/io5";
 import CommentCard from "./CommentCard";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { deletePost } from "../features/post/PostSlice";
 
 export default function PostCard({ post }) {
- const navigate= useNavigate();
-  const {allUsers} = useSelector(store => store.user)
-  const {user}=useSelector(store=>store.auth)
-  const { comments, content, username,userId } = post;
-  const userDetails=allUsers.find(user=>user.username===username)
+  const navigate = useNavigate();
+  const { allUsers } = useSelector((store) => store.user);
+  const { user } = useSelector((store) => store.auth);
+  const dispatch = useDispatch()
+  const { comments, content, username, userId,_id } = post;
+  const userDetails = allUsers.find((user) => user.username === username);
   return (
     <Flex w="full" alignItems="center" justifyContent="center" mt={4}>
       <Box
@@ -40,9 +47,20 @@ export default function PostCard({ post }) {
       >
         <Flex justifyContent="space-between" alignItems="center">
           <HStack w="full">
-            <Avatar cursor="pointer" onClick={()=>navigate(`/user-profile/${userId}`)} name="ryan" src="https://bit.ly/ryan-florence" />
+            <Avatar
+              cursor="pointer"
+              onClick={() => navigate(`/user-profile/${userId}`)}
+              name="ryan"
+              src="https://bit.ly/ryan-florence"
+            />
             <VStack alignItems="start" justifyContent="center">
-              <Button variant="link" cursor="pointer" as="h6" size="10px" onClick={()=>navigate(`/user-profile/${userId}`)}>
+              <Button
+                variant="link"
+                cursor="pointer"
+                as="h6"
+                size="10px"
+                onClick={() => navigate(`/user-profile/${userId}`)}
+              >
                 {userDetails?.firstName} {userDetails?.lastName}
                 <chakra.span
                   ml="4px"
@@ -61,9 +79,21 @@ export default function PostCard({ post }) {
               </Text>
             </VStack>
           </HStack>
-          <Button display={post.username===user.username?"flex":"none"} borderRadius="50%" w="20px" mr="10px">
-            <Icon as={MdOutlineMoreVert} w="22px" h="22px" />
-          </Button>
+          <Menu placement="bottom-end">
+            <MenuButton
+              as={IconButton}
+              w="22px"
+              h="22px"
+              aria-label="Options"
+              icon={<MdOutlineMoreVert />}
+              variant="outline"
+              display={post.username === user.username ? "flex" : "none"}
+            />
+            <MenuList>
+              <MenuItem >Edit</MenuItem>
+              <MenuItem onClick={()=>dispatch(deletePost(_id))}>Delete</MenuItem>
+            </MenuList>
+          </Menu>
         </Flex>
         <Box mt={2}>
           <chakra.p mt={2} color={useColorModeValue("gray.600", "gray.300")}>
@@ -100,7 +130,9 @@ export default function PostCard({ post }) {
             </InputGroup>
           </HStack>
           <VStack mt={3} alignItems="start">
-            {comments.map((comment) => <CommentCard comment={comment}/>)}
+            {comments.map((comment) => (
+              <CommentCard comment={comment} />
+            ))}
           </VStack>
         </Box>
       </Box>
