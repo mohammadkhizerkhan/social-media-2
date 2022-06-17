@@ -32,7 +32,7 @@ export const getPostCommentsHandler = function (schema, request) {
  * send POST Request at /api/comments/add/:postId
  * */
 
-export const addPostCommentHandler = function (schema, request) {
+ export const addPostCommentHandler = function (schema, request) {
   const user = requiresAuth.call(this, request);
   try {
     if (!user) {
@@ -40,9 +40,7 @@ export const addPostCommentHandler = function (schema, request) {
         404,
         {},
         {
-          errors: [
-            "The username you entered is not Registered. Not Found error",
-          ],
+          errors: ["The username you entered is not Registered. Not Found error"],
         }
       );
     }
@@ -58,9 +56,9 @@ export const addPostCommentHandler = function (schema, request) {
       updatedAt: formatDate(),
     };
     const post = schema.posts.findBy({ _id: postId }).attrs;
-    post.comments.push(comment);
+    post.comments.unshift(comment);
     this.db.posts.update({ _id: postId }, post);
-    return new Response(201, {}, { comments: post.comments });
+    return new Response(201, {}, { posts: this.db.posts });
   } catch (error) {
     return new Response(
       500,

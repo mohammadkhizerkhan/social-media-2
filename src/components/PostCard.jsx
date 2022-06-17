@@ -38,6 +38,7 @@ import CommentCard from "./CommentCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
+  addComment,
   addPostToBookmark,
   deletePost,
   dislikePost,
@@ -45,16 +46,18 @@ import {
   likePost,
   removePostFromBookmark,
 } from "../features/post/PostSlice";
+import { FaSadCry } from "react-icons/fa";
 
 export default function PostCard({ post }) {
+  const { comments, content, username, userId, _id, likes, bookmark } = post;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { allUsers } = useSelector((store) => store.user);
   const { user } = useSelector((store) => store.auth);
   const { userBookmarks } = useSelector((store) => store.post);
-  const dispatch = useDispatch();
-  const { comments, content, username, userId, _id, likes, bookmark } = post;
   const [postData, setPostData] = useState({ content: content });
+  const [comment, setComment] = useState({ text: "" });
   const userDetails = allUsers.find((user) => user.username === username);
   const isLiked = likes.likedBy.some((like) => like.username === user.username);
   const isBookmarked = userBookmarks.some((bookmark) => bookmark._id === _id);
@@ -147,7 +150,9 @@ export default function PostCard({ post }) {
             borderRadius="50%"
             w="20px"
             onClick={() =>
-              isBookmarked ? dispatch(removePostFromBookmark(_id)) : dispatch(addPostToBookmark(_id))
+              isBookmarked
+                ? dispatch(removePostFromBookmark(_id))
+                : dispatch(addPostToBookmark(_id))
             }
           >
             <Icon
@@ -165,13 +170,25 @@ export default function PostCard({ post }) {
               src="https://bit.ly/ryan-florence"
             />
             <InputGroup size="md">
-              <Input pr="4.5rem" placeholder="Enter Comment" />
+              <Input
+                pr="4.5rem"
+                value={comment.text}
+                onChange={(e) =>
+                  setComment((prev) => ({ ...prev, text: e.target.value }))
+                }
+                placeholder="Enter Comment"
+              />
               <InputRightElement width="4.5rem">
                 <Button
                   h="1.75rem"
                   p="15px"
                   size="sm"
                   bg={useColorModeValue("gray.200", "gray.600")}
+                  disabled={comment.text ? false : true}
+                  onClick={() => {
+                    dispatch(addComment({ postId: _id, commentData: comment }));
+                    setComment({ text: "" });
+                  }}
                 >
                   POST
                 </Button>

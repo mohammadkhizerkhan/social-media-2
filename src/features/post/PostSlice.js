@@ -4,7 +4,7 @@ import axios from "axios";
 const initialState = {
   allPost: [],
   userPost: [],
-  userBookmarks:[]
+  userBookmarks: [],
 };
 
 export const getAllPosts = createAsyncThunk(
@@ -121,7 +121,7 @@ export const addPostToBookmark = createAsyncThunk(
         {},
         { headers: { authorization: token } }
       );
-      console.log(response.data)
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -141,6 +141,30 @@ export const removePostFromBookmark = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log(error);
+    }
+  }
+);
+
+export const addComment = createAsyncThunk(
+  "post/addComment",
+  async ({ postId, commentData }, thunkAPI) => {
+    // console.log(commentData)
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `/api/comments/add/${postId}`,
+        {
+          commentData,
+        },
+        {
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error)
     }
   }
 );
@@ -211,6 +235,15 @@ const postSlice = createSlice({
       state.allPost = action.payload.posts;
     },
     [dislikePost.rejected]: (state, action) => {
+      console.log(action.payload);
+    },
+    [addComment.pending]: (state) => {
+      // console.log(state)
+    },
+    [addComment.fulfilled]: (state, action) => {
+      state.allPost = action.payload.posts;
+    },
+    [addComment.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [addPostToBookmark.pending]: (state) => {
