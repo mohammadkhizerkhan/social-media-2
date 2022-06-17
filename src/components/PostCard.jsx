@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   chakra,
   Box,
@@ -13,19 +13,51 @@ import {
   InputRightElement,
   InputGroup,
   Icon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  Textarea,
+  ModalFooter,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { MdOutlineBookmarkBorder, MdOutlineMoreVert } from "react-icons/md";
-import { IoHeartOutline } from "react-icons/io5";
+import {
+  MdOutlineBookmarkBorder,
+  MdOutlineMoreVert,
+  MdOutlineBookmark,
+} from "react-icons/md";
+import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 import CommentCard from "./CommentCard";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import {
+  addPostToBookmark,
+  deletePost,
+  dislikePost,
+  editPost,
+  likePost,
+  removePostFromBookmark,
+} from "../features/post/PostSlice";
 
 export default function PostCard({ post }) {
- const navigate= useNavigate();
-  const {allUsers} = useSelector(store => store.user)
-  const {user}=useSelector(store=>store.auth)
-  const { comments, content, username,userId } = post;
-  const userDetails=allUsers.find(user=>user.username===username)
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
+  const { allUsers } = useSelector((store) => store.user);
+  const { user } = useSelector((store) => store.auth);
+  const { userBookmarks } = useSelector((store) => store.post);
+  const dispatch = useDispatch();
+  const { comments, content, username, userId, _id, likes, bookmark } = post;
+  const [postData, setPostData] = useState({ content: content });
+  const userDetails = allUsers.find((user) => user.username === username);
+  const isLiked = likes.likedBy.some((like) => like.username === user.username);
+  const isBookmarked = userBookmarks.some((bookmark) => bookmark._id === _id);
   return (
     <Flex w="full" alignItems="center" justifyContent="center" mt={4}>
       <Box
@@ -40,9 +72,20 @@ export default function PostCard({ post }) {
       >
         <Flex justifyContent="space-between" alignItems="center">
           <HStack w="full">
-            <Avatar cursor="pointer" onClick={()=>navigate(`/user-profile/${userId}`)} name="ryan" src="https://bit.ly/ryan-florence" />
+            <Avatar
+              cursor="pointer"
+              onClick={() => navigate(`/user-profile/${userId}`)}
+              name="ryan"
+              src="https://bit.ly/ryan-florence"
+            />
             <VStack alignItems="start" justifyContent="center">
-              <Button variant="link" cursor="pointer" as="h6" size="10px" onClick={()=>navigate(`/user-profile/${userId}`)}>
+              <Button
+                variant="link"
+                cursor="pointer"
+                as="h6"
+                size="10px"
+                onClick={() => navigate(`/user-profile/${userId}`)}
+              >
                 {userDetails?.firstName} {userDetails?.lastName}
                 <chakra.span
                   ml="4px"
@@ -61,9 +104,23 @@ export default function PostCard({ post }) {
               </Text>
             </VStack>
           </HStack>
-          <Button display={post.username===user.username?"flex":"none"} borderRadius="50%" w="20px" mr="10px">
-            <Icon as={MdOutlineMoreVert} w="22px" h="22px" />
-          </Button>
+          <Menu placement="bottom-end">
+            <MenuButton
+              as={IconButton}
+              w="22px"
+              h="22px"
+              aria-label="Options"
+              icon={<MdOutlineMoreVert />}
+              variant="outline"
+              display={post.username === user.username ? "flex" : "none"}
+            />
+            <MenuList>
+              <MenuItem onClick={onOpen}>Edit</MenuItem>
+              <MenuItem onClick={() => dispatch(deletePost(_id))}>
+                Delete
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </Flex>
         <Box mt={2}>
           <chakra.p mt={2} color={useColorModeValue("gray.600", "gray.300")}>
@@ -71,11 +128,33 @@ export default function PostCard({ post }) {
           </chakra.p>
         </Box>
         <Flex justifyContent="start" alignItems="center" mt={4}>
-          <Button borderRadius="50%" w="20px" mr="10px">
-            <Icon as={IoHeartOutline} w="22px" h="22px" />
+          <Button
+            // borderRadius="50%"
+            w="20px"
+            mr="10px"
+            onClick={() =>
+              isLiked ? dispatch(dislikePost(_id)) : dispatch(likePost(_id))
+            }
+          >
+            <Icon
+              as={isLiked ? IoHeartSharp : IoHeartOutline}
+              w="22px"
+              h="22px"
+            />
+            <span px="10px">{likes.likeCount}</span>
           </Button>
-          <Button borderRadius="50%" w="20px">
-            <Icon as={MdOutlineBookmarkBorder} w="22px" h="22px" />
+          <Button
+            borderRadius="50%"
+            w="20px"
+            onClick={() =>
+              isBookmarked ? dispatch(removePostFromBookmark(_id)) : dispatch(addPostToBookmark(_id))
+            }
+          >
+            <Icon
+              as={isBookmarked ? MdOutlineBookmark : MdOutlineBookmarkBorder}
+              w="22px"
+              h="22px"
+            />
           </Button>
         </Flex>
         <Box mt={2}>
@@ -100,10 +179,52 @@ export default function PostCard({ post }) {
             </InputGroup>
           </HStack>
           <VStack mt={3} alignItems="start">
-            {comments.map((comment) => <CommentCard comment={comment}/>)}
+            {comments.map((comment) => (
+              <CommentCard comment={comment} />
+            ))}
           </VStack>
         </Box>
       </Box>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add a post</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <HStack alignItems="start">
+              <Avatar
+                name="ryan"
+                src="https://bit.ly/ryan-florence"
+                size="sm"
+              />
+              <Textarea
+                placeholder="write something here..."
+                minHeight="120px"
+                value={postData.content}
+                onChange={(e) =>
+                  setPostData((prev) => ({
+                    ...prev,
+                    content: e.target.value,
+                  }))
+                }
+              />
+            </HStack>
+          </ModalBody>
+          <ModalFooter p="10px">
+            <Button
+              colorScheme="brand"
+              mr={3}
+              disabled={content === postData.content ? true : false}
+              onClick={() => {
+                dispatch(editPost({ postData, postId: _id }));
+                onClose();
+              }}
+            >
+              Update
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 }

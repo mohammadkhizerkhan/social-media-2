@@ -7,10 +7,10 @@ import { useSelector,useDispatch } from "react-redux";
 function Profile() {
   const dispatch = useDispatch()
   const {user}=useSelector(store=>store.auth)
-  const {userPost}=useSelector(store=>store.post)
+  const {userPost,allPost}=useSelector(store=>store.post)
   useEffect(() => {
     dispatch(getUserPost(user.username))
-  }, [])
+  }, [allPost])
   return (
     <Box as="main" p="4" bg={useColorModeValue("#F9FAFB", "gray.600")}>
       <ProfileCard user={user} userPost={userPost}/>
