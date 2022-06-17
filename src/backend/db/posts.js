@@ -213,6 +213,15 @@ export const posts = [
           downvotedBy: [],
         },
       },
+      {
+        _id: uuid(),
+        username: "test@mail.com",
+        text: "Wow!",
+        votes: {
+          upvotedBy: [],
+          downvotedBy: [],
+        },
+      },
     ],
     createdAt: formatDate(),
     updatedAt: formatDate(),

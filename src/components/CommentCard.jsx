@@ -12,16 +12,20 @@ import {
   MenuItem,
   IconButton,
 } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineMoreVert } from "react-icons/md";
+import { deleteComment } from "../features/post/PostSlice";
 
-function CommentCard({ comment }) {
-  const { text, username } = comment;
+function CommentCard({ comment,postId }) {
+  const { text, username,_id } = comment;
+  // console.log(comment)
   const { allUsers } = useSelector((store) => store.user);
   const userDetails = allUsers.find((user) => user.username === username);
   const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  console.log(postId,_id)
   return (
     <HStack alignItems="start" w="full">
       <Avatar
@@ -62,7 +66,7 @@ function CommentCard({ comment }) {
         />
         <MenuList>
           <MenuItem>Edit</MenuItem>
-          <MenuItem>Delete</MenuItem>
+          <MenuItem onClick={()=>dispatch(deleteComment({postId:postId,commentId:_id}))}>Delete</MenuItem>
         </MenuList>
       </Menu>
     </HStack>

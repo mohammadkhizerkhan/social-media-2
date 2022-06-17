@@ -168,6 +168,27 @@ export const addComment = createAsyncThunk(
     }
   }
 );
+export const deleteComment = createAsyncThunk(
+  "post/deleteComment",
+  async ({ postId,commentId }, thunkAPI) => {
+    console.log(postId,commentId)
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        `/api/comments/delete/${postId}/${commentId}`,
+        {
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      console.log(response.data)
+      // return response.data;
+    } catch (error) {
+      console.log(error)
+    }
+  }
+);
 
 const postSlice = createSlice({
   name: "post",
@@ -246,6 +267,15 @@ const postSlice = createSlice({
     [addComment.rejected]: (state, action) => {
       console.log(action.payload);
     },
+    // [deleteComment.pending]: (state) => {
+    //   // console.log(state)
+    // },
+    // [deleteComment.fulfilled]: (state, action) => {
+    //   state.allPost = action.payload.posts;
+    // },
+    // [deleteComment.rejected]: (state, action) => {
+    //   console.log(action.payload);
+    // },
     [addPostToBookmark.pending]: (state) => {
       // console.log(state)
     },

@@ -197,7 +197,7 @@ export default function PostCard({ post }) {
           </HStack>
           <VStack mt={3} alignItems="start">
             {comments.map((comment) => (
-              <CommentCard comment={comment} />
+              <CommentCard comment={comment} postId={_id}/>
             ))}
           </VStack>
         </Box>
