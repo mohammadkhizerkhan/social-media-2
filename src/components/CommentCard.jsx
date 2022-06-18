@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   chakra,
   Box,
@@ -19,13 +19,12 @@ import { deleteComment } from "../features/post/PostSlice";
 
 function CommentCard({ comment,postId }) {
   const { text, username,_id } = comment;
-  // console.log(comment)
   const { allUsers } = useSelector((store) => store.user);
   const userDetails = allUsers.find((user) => user.username === username);
   const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  console.log(postId,_id)
+  const [editComment,setEditComment]=useState({text:text})
   return (
     <HStack alignItems="start" w="full">
       <Avatar
@@ -65,7 +64,7 @@ function CommentCard({ comment,postId }) {
           display={username === user.username ? "flex" : "none"}
         />
         <MenuList>
-          <MenuItem>Edit</MenuItem>
+          <MenuItem >Edit</MenuItem>
           <MenuItem onClick={()=>dispatch(deleteComment({postId:postId,commentId:_id}))}>Delete</MenuItem>
         </MenuList>
       </Menu>
