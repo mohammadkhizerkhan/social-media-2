@@ -12,23 +12,32 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Textarea,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineMoreVert } from "react-icons/md";
-import { deleteComment } from "../features/post/PostSlice";
+import { deleteComment, editComment, editPost } from "../features/post/PostSlice";
 import { EmailIcon } from "@chakra-ui/icons";
 import { IoCloseCircleOutline } from "react-icons/io5";
 
 function CommentCard({ comment, postId }) {
   const { text, username, _id } = comment;
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { allUsers } = useSelector((store) => store.user);
   const userDetails = allUsers.find((user) => user.username === username);
   const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isUsers = username === user.username;
-  const [editComment, setEditComment] = useState({ text: text });
+  const [commentData, setCommentData] = useState({ text: text });
   return (
     <>
       <HStack alignItems="start" w="full">
@@ -70,7 +79,7 @@ function CommentCard({ comment, postId }) {
               display={username === user.username ? "flex" : "none"}
             />
             <MenuList>
-              <MenuItem>Edit</MenuItem>
+              <MenuItem onClick={onOpen}>Edit</MenuItem>
               <MenuItem
                 onClick={() =>
                   dispatch(deleteComment({ postId, commentId: _id }))
@@ -81,6 +90,41 @@ function CommentCard({ comment, postId }) {
             </MenuList>
           </Menu>
       </HStack>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Commnent</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <HStack alignItems="start">
+              <Textarea
+                placeholder="write something here..."
+                minHeight="120px"
+                value={commentData.text}
+                onChange={(e) =>
+                  setCommentData((prev) => ({
+                    ...prev,
+                    text: e.target.value,
+                  }))
+                }
+              />
+            </HStack>
+          </ModalBody>
+          <ModalFooter p="10px">
+            <Button
+              colorScheme="brand"
+              mr={3}
+              disabled={text === commentData.text ? true : false}
+              onClick={() => {
+                dispatch(editComment({ postId,commentId:_id,commentData}));
+                onClose();
+              }}
+            >
+              Update
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 }

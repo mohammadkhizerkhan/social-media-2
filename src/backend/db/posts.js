@@ -22,7 +22,7 @@ export const posts = [
     comments: [
       {
         _id: uuid(),
-        username: "sharukh@mail.com",
+        username: "test@mail.com",
         text: "Interesting",
         votes: {
           upvotedBy: [],
@@ -57,7 +57,7 @@ export const posts = [
     comments: [
       {
         _id: uuid(),
-        username: "salman@mail.com",
+        username: "test@mail.com",
         text: "Interesting",
         votes: {
           upvotedBy: [],
@@ -66,7 +66,7 @@ export const posts = [
       },
       {
         _id: uuid(),
-        username: "sharukh@mail.com",
+        username: "test@mail.com",
         text: "Wow!",
         votes: {
           upvotedBy: [],

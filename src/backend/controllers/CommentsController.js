@@ -77,7 +77,7 @@ export const addPostCommentHandler = function (schema, request) {
  * send POST Request at /api/comments/edit/:postId/:commentId
  * */
 
-export const editPostCommentHandler = function (schema, request) {
+ export const editPostCommentHandler = function (schema, request) {
   const user = requiresAuth.call(this, request);
   try {
     if (!user) {
@@ -85,18 +85,14 @@ export const editPostCommentHandler = function (schema, request) {
         404,
         {},
         {
-          errors: [
-            "The username you entered is not Registered. Not Found error",
-          ],
+          errors: ["The username you entered is not Registered. Not Found error"],
         }
       );
     }
     const { postId, commentId } = request.params;
     const { commentData } = JSON.parse(request.requestBody);
     const post = schema.posts.findBy({ _id: postId }).attrs;
-    const commentIndex = post.comments.findIndex(
-      (comment) => comment._id === commentId
-    );
+    const commentIndex = post.comments.findIndex((comment) => comment._id === commentId);
     if (post.comments[commentIndex].username !== user.username) {
       return new Response(
         400,
@@ -110,7 +106,7 @@ export const editPostCommentHandler = function (schema, request) {
       updatedAt: formatDate(),
     };
     this.db.posts.update({ _id: postId }, post);
-    return new Response(201, {}, { comments: post.comments });
+    return new Response(201, {}, { posts: this.db.posts });
   } catch (error) {
     return new Response(
       500,

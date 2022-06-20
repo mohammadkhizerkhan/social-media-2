@@ -187,6 +187,30 @@ export const deleteComment = createAsyncThunk(
     }
   }
 );
+export const editComment = createAsyncThunk(
+  "post/editComment",
+  async ({ postId,commentId,commentData }, thunkAPI) => {
+    console.log("Click")
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `/api/comments/edit/${postId}/${commentId}`,
+        {
+          commentData
+        },
+        {
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      console.log(response.data)
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  }
+);
 
 const postSlice = createSlice({
   name: "post",
@@ -273,6 +297,15 @@ const postSlice = createSlice({
       state.allPost = action.payload.posts;
     },
     [deleteComment.rejected]: (state, action) => {
+      console.log(action.payload);
+    },
+    [editComment.pending]: (state) => {
+      // console.log(state)
+    },
+    [editComment.fulfilled]: (state, action) => {
+      state.allPost = action.payload.posts;
+    },
+    [editComment.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [addPostToBookmark.pending]: (state) => {
