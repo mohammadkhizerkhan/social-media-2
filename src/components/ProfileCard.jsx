@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import {
   chakra,
   Box,
@@ -27,15 +27,26 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { followUser, unFollowUser } from "../features/auth/AuthSlice";
 import { updateUser } from "../features/auth/AuthSlice";
+import { CallToast } from "../services/CallToast";
 
 function ProfileCard({ user, userPost }) {
-  const {allUsers}=useSelector(store=>store.user);
+  const { allUsers } = useSelector((store) => store.user);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
   const { user: mainUser } = useSelector((store) => store.auth);
-  const [userData, setUserData] = useState({bio:"",})
+  const [userData, setUserData] = useState({
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    bio: user?.bio,
+    link: user?.link,
+  });
+  const changeHandler = (e) => {
+    setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
-  const isFollowing = mainUser.following.find(item=>item.userId===user.userId)
+  const isFollowing = mainUser.following.find(
+    (item) => item.userId === user.userId
+  );
   return (
     <Flex w="full" alignItems="center" justifyContent="center" mt={4}>
       <Box
@@ -50,7 +61,7 @@ function ProfileCard({ user, userPost }) {
       >
         <Flex justifyContent="space-between" alignItems="center">
           <VStack w="full" alignItems="center">
-            <Avatar  name="ryan" src="https://bit.ly/ryan-florence" size="lg" />
+            <Avatar name="ryan" src="https://bit.ly/ryan-florence" size="lg" />
             <VStack alignItems="center" justifyContent="center">
               <Heading as="h4" size="50px">
                 {user?.firstName} {user?.lastName}
@@ -111,12 +122,25 @@ function ProfileCard({ user, userPost }) {
                         borderColor={useColorModeValue("gray.200", "gray.700")}
                       >
                         <FormControl>
-                          <FormLabel>Name</FormLabel>
+                          <FormLabel>First Name</FormLabel>
                           <Input
                             mt={0}
                             type="text"
-                            placeholder="Name"
+                            placeholder="First Name"
                             required="true"
+                            name="firstName"
+                            value={userData.firstName}
+                            onChange={(e) => changeHandler(e)}
+                          />
+                          <FormLabel>Last Name</FormLabel>
+                          <Input
+                            mt={0}
+                            type="text"
+                            placeholder="Last Name"
+                            required="true"
+                            name="lastName"
+                            value={userData.lastName}
+                            onChange={(e) => changeHandler(e)}
                           />
                         </FormControl>
                         <FormControl>
@@ -124,6 +148,9 @@ function ProfileCard({ user, userPost }) {
                           <Textarea
                             placeholder="Enter your bio here"
                             minHeight="120px"
+                            name="bio"
+                            value={userData.bio}
+                            onChange={(e) => changeHandler(e)}
                           />
                         </FormControl>
                         <FormControl>
@@ -131,15 +158,40 @@ function ProfileCard({ user, userPost }) {
                           <Input
                             mt={0}
                             type="text"
+                            name="link"
                             placeholder="Enter your website here"
                             required="true"
+                            value={userData.link}
+                            onChange={(e) => changeHandler(e)}
                           />
                         </FormControl>
                       </SimpleGrid>
                     </HStack>
                   </ModalBody>
                   <ModalFooter p="10px">
-                    <Button colorScheme="brand" mr={3} onClick={()=>dispatch(updateUser())}>
+                    <Button
+                      colorScheme="brand"
+                      disabled={
+                        (user.firstName === userData.firstName &&
+                        user.lastName === userData.lastName &&
+                        user.bio === userData.bio &&
+                        user.link === userData.link)?true:false
+                      }
+                      mr={3}
+                      onClick={() => {
+                        if (
+                          userData.bio &&
+                          userData.firstName &&
+                          userData.lastName &&
+                          userData.link
+                        ) {
+                          dispatch(updateUser({ userData }));
+                        } else {
+                          CallToast("error", "please fill the details");
+                        }
+                        onClose();
+                      }}
+                    >
                       SAVE
                     </Button>
                   </ModalFooter>
@@ -164,9 +216,9 @@ function ProfileCard({ user, userPost }) {
               </Flex>
               <Link
                 color={useColorModeValue("gray.600", "gray.400")}
-                href="https://peerlist.io/khizerkhan"
+                href={user.link}
               >
-               {user?.link}
+                {user?.link}
               </Link>
             </VStack>
           </VStack>
