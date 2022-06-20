@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import {
   chakra,
   Box,
@@ -26,11 +26,14 @@ import {
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { followUser, unFollowUser } from "../features/auth/AuthSlice";
+import { updateUser } from "../features/auth/AuthSlice";
 
 function ProfileCard({ user, userPost }) {
+  const {allUsers}=useSelector(store=>store.user);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
   const { user: mainUser } = useSelector((store) => store.auth);
+  const [userData, setUserData] = useState({bio:"",})
 
   const isFollowing = mainUser.following.find(item=>item.userId===user.userId)
   return (
@@ -136,7 +139,7 @@ function ProfileCard({ user, userPost }) {
                     </HStack>
                   </ModalBody>
                   <ModalFooter p="10px">
-                    <Button colorScheme="brand" mr={3}>
+                    <Button colorScheme="brand" mr={3} onClick={()=>dispatch(updateUser())}>
                       SAVE
                     </Button>
                   </ModalFooter>
@@ -163,7 +166,7 @@ function ProfileCard({ user, userPost }) {
                 color={useColorModeValue("gray.600", "gray.400")}
                 href="https://peerlist.io/khizerkhan"
               >
-                https://peerlist.io/khizerkhan
+               {user?.link}
               </Link>
             </VStack>
           </VStack>

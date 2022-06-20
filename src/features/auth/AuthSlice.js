@@ -43,7 +43,8 @@ export const loginUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "user/updateUser",
-  async (userData, thunkAPI) => {
+  async ({userData}, thunkAPI) => {
+    console.log(thunkAPI.getState())
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
@@ -57,6 +58,7 @@ export const updateUser = createAsyncThunk(
           },
         }
       );
+      console.log(response.data)
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error)
