@@ -8,6 +8,10 @@ import {
   Button,
   IconButton,
   VStack,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +27,7 @@ function CommentCard({ comment, postId }) {
   const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isUsers = username === user.username;
   const [editComment, setEditComment] = useState({ text: text });
   return (
     <>
@@ -34,7 +39,7 @@ function CommentCard({ comment, postId }) {
           size="sm"
           src="https://bit.ly/ryan-florence"
         />
-        <VStack
+        <Box
           alignItems="flex-start"
           mt={2}
           p={2}
@@ -53,24 +58,33 @@ function CommentCard({ comment, postId }) {
             {userDetails?.firstName} {userDetails?.lastName}
           </Button>
           <span>{text}</span>
-          <button
-            style={{
-              margin: 0,
-              width: "2.5rem",
-              height: "2.5rem",
-              backgroundColor: "lightgrey",
-              display:"flex",
-              justifyContent:"center",
-              alignItems:"center",
-              color: "black",
-            }}
-          >
-            <IoCloseCircleOutline />
-          </button>
-        </VStack>
+        </Box>
+          <Menu placement="bottom-end">
+            <MenuButton
+              as={IconButton}
+              w="22px"
+              h="22px"
+              aria-label="Options"
+              icon={<MdOutlineMoreVert />}
+              variant="outline"
+              display={username === user.username ? "flex" : "none"}
+            />
+            <MenuList>
+              <MenuItem>Edit</MenuItem>
+              <MenuItem
+                onClick={() =>
+                  dispatch(deleteComment({ postId, commentId: _id }))
+                }
+              >
+                Delete
+              </MenuItem>
+            </MenuList>
+          </Menu>
       </HStack>
     </>
   );
 }
 
 export default CommentCard;
+
+// display={username === user.username ? "flex" : "none"}
