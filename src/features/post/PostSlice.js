@@ -128,6 +128,21 @@ export const addPostToBookmark = createAsyncThunk(
     }
   }
 );
+export const getBookmarkPost = createAsyncThunk(
+  "posts/getBookmarkPostp",
+  async (_, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("/api/users/bookmark", {
+        headers: { authorization: token },
+      });
+      console.log(response.data)
+      return response.data
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 export const removePostFromBookmark = createAsyncThunk(
   "post/removePostFromBookmark",
   async (postId, thunkAPI) => {
@@ -164,13 +179,14 @@ export const addComment = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 );
+
 export const deleteComment = createAsyncThunk(
   "post/deleteComment",
-  async ({ postId,commentId }, thunkAPI) => {
+  async ({ postId, commentId }, thunkAPI) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
@@ -183,20 +199,20 @@ export const deleteComment = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error)
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
 export const editComment = createAsyncThunk(
   "post/editComment",
-  async ({ postId,commentId,commentData }, thunkAPI) => {
-    console.log("Click")
+  async ({ postId, commentId, commentData }, thunkAPI) => {
+    console.log("Click");
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
         `/api/comments/edit/${postId}/${commentId}`,
         {
-          commentData
+          commentData,
         },
         {
           headers: {
@@ -204,10 +220,10 @@ export const editComment = createAsyncThunk(
           },
         }
       );
-      console.log(response.data)
+      console.log(response.data);
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error)
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -293,7 +309,6 @@ const postSlice = createSlice({
       // console.log(state)
     },
     [deleteComment.fulfilled]: (state, action) => {
-      
       state.allPost = action.payload.posts;
     },
     [deleteComment.rejected]: (state, action) => {
@@ -306,6 +321,15 @@ const postSlice = createSlice({
       state.allPost = action.payload.posts;
     },
     [editComment.rejected]: (state, action) => {
+      console.log(action.payload);
+    },
+    [getBookmarkPost.pending]: (state) => {
+      // console.log(state)
+    },
+    [getBookmarkPost.fulfilled]: (state, action) => {
+      state.userBookmarks = action.payload.bookmarks;
+    },
+    [getBookmarkPost.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [addPostToBookmark.pending]: (state) => {
