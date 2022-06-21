@@ -17,6 +17,7 @@ import { MdOutlineLock, MdOutlineMail } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useDispatch,useSelector } from "react-redux";
 import { signUpUser } from "../features/auth/AuthSlice";
+import { CallToast } from "../services/CallToast";
 
 function Signup() {
   const navigate = useNavigate();
@@ -38,6 +39,9 @@ function Signup() {
     const { name, email, password } = signUpForm;
     if (name && email && password) {
       dispatch(signUpUser(signUpForm));
+    }
+    else{
+      CallToast("error","please fill the form properly")
     }
     setSignUpForm({
       name: "",
@@ -88,6 +92,7 @@ function Signup() {
                 value={signUpForm.email}
                 onChange={(e) => handleChange(e)}
                 placeholder="Email"
+                required
               />
             </InputGroup>
           </Flex>
