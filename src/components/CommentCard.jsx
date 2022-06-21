@@ -30,14 +30,14 @@ import { EmailIcon } from "@chakra-ui/icons";
 import { IoCloseCircleOutline } from "react-icons/io5";
 
 function CommentCard({ comment, postId }) {
-  const { text, username, _id } = comment;
+  const { username, _id } = comment;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { allUsers } = useSelector((store) => store.user);
   const userDetails = allUsers.find((user) => user.username === username);
   const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [commentData, setCommentData] = useState({ text: text });
+  const [commentData, setCommentData] = useState({ text: comment.text });
   return (
     <>
       <HStack alignItems="start" w="full">
@@ -66,7 +66,7 @@ function CommentCard({ comment, postId }) {
           >
             {userDetails?.firstName} {userDetails?.lastName}
           </Button>
-          <span>{text}</span>
+          <span>{comment.text}</span>
         </Box>
           <Menu placement="bottom-end">
             <MenuButton
@@ -114,7 +114,7 @@ function CommentCard({ comment, postId }) {
             <Button
               colorScheme="brand"
               mr={3}
-              disabled={text === commentData.text ? true : false}
+              disabled={comment.text === commentData.text ? true : false}
               onClick={() => {
                 dispatch(editComment({ postId,commentId:_id,commentData}));
                 onClose();
