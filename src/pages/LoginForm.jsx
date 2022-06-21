@@ -17,6 +17,7 @@ import { MdOutlineLock, MdOutlineMail } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../features/auth/AuthSlice";
 import {useDispatch,useSelector} from "react-redux"
+import { CallToast } from "../services/CallToast";
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -37,6 +38,9 @@ function LoginForm() {
     const {email, password } = loginForm;
     if (email && password) {
       dispatch(loginUser(loginForm));
+    }
+    else{
+      CallToast("error","please enter valid credentials")
     }
     setLoginForm({
       email: "",
@@ -93,6 +97,7 @@ function LoginForm() {
                 value={loginForm.password}
                 onChange={(e) => handleChange(e)}
                 placeholder="Password"
+                required={true}
               />
             </InputGroup>
           </Flex>

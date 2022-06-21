@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@chakra-ui/react";
 import { PostCard } from "../components";
 import { useColorModeValue,Flex,Center } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getBookmarkPost } from "../features/post/PostSlice";
 function Saved() {
+  const {allPost}=useSelector(store=>store.post);
   const {userBookmarks}=useSelector(store=>store.post);
+  const dispatch=useDispatch();
+  useEffect(() => {
+    dispatch(getBookmarkPost())
+  }, [allPost])
+  
   return (
     <Box as="main" p="4" minH="100vh" bg={useColorModeValue("#F9FAFB", "gray.600")}>
       {userBookmarks.length ? (

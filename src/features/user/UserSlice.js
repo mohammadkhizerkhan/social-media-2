@@ -19,6 +19,7 @@ export const getAllUsers = createAsyncThunk(
 
 
 
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -33,7 +34,6 @@ const userSlice = createSlice({
     [getAllUsers.rejected]: (state, action) => {
       console.log(action.payload);
     },
-    
   },
 });
 

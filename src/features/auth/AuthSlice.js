@@ -43,7 +43,7 @@ export const loginUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "user/updateUser",
-  async (userData, thunkAPI) => {
+  async ({userData}, thunkAPI) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
@@ -158,16 +158,16 @@ const authSlice = createSlice({
           : action.payload.response.status === 401 && "invalid credentials"
       );
     },
-    // [updateUser.pending]: (state) => {
-    //   console.log(state);
-    // },
-    // [updateUser.fulfilled]: (state, action) => {
-    //   state.user = action.payload;
-    //   localStorage.setItem("user", JSON.stringify(state.user));
-    // },
-    // [updateUser.rejected]: (state, action) => {
-    //   state.error = action.payload;
-    // },
+    [updateUser.pending]: (state) => {
+      console.log(state);
+    },
+    [updateUser.fulfilled]: (state, action) => {
+      state.user = action.payload.user;
+      localStorage.setItem("user", JSON.stringify(state.user));
+    },
+    [updateUser.rejected]: (state, action) => {
+      state.error = action.payload;
+    },
     [followUser.pending]: (state) => {
       state.isLoading=true;
     },

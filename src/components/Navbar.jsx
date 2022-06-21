@@ -35,19 +35,8 @@ function Navbar() {
         // position="fixed"
         // sx={{ zIndex: 3 }}
         align="center"
-        justify="space-between"
+        justify="flex-end"
       >
-        <InputGroup mx={8} w="full" display={{ base: "unset", md: "flex" }}>
-          <InputLeftElement color="gray.500">
-            <Icon as={MdOutlineSearch} w="25px" h="25px" mt="8px" />
-          </InputLeftElement>
-          <Input
-            w="full"
-            size="lg"
-            bg={useColorModeValue("white", "gray.800")}
-            placeholder="Search for articles..."
-          />
-        </InputGroup>
         <Button
           onClick={toggleColorMode}
           colorScheme="brand"

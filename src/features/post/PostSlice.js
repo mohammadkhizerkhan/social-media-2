@@ -4,7 +4,7 @@ import axios from "axios";
 const initialState = {
   allPost: [],
   userPost: [],
-  userBookmarks:[]
+  userBookmarks: [],
 };
 
 export const getAllPosts = createAsyncThunk(
@@ -121,8 +121,23 @@ export const addPostToBookmark = createAsyncThunk(
         {},
         { headers: { authorization: token } }
       );
-      console.log(response.data)
+      console.log(response.data);
       return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const getBookmarkPost = createAsyncThunk(
+  "posts/getBookmarkPostp",
+  async (_, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("/api/users/bookmark", {
+        headers: { authorization: token },
+      });
+      console.log(response.data)
+      return response.data
     } catch (error) {
       console.log(error);
     }
@@ -141,6 +156,74 @@ export const removePostFromBookmark = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log(error);
+    }
+  }
+);
+
+export const addComment = createAsyncThunk(
+  "post/addComment",
+  async ({ postId, commentData }, thunkAPI) => {
+    // console.log(commentData)
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `/api/comments/add/${postId}`,
+        {
+          commentData,
+        },
+        {
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const deleteComment = createAsyncThunk(
+  "post/deleteComment",
+  async ({ postId, commentId }, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        `/api/comments/delete/${postId}/${commentId}`,
+        {
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+export const editComment = createAsyncThunk(
+  "post/editComment",
+  async ({ postId, commentId, commentData }, thunkAPI) => {
+    console.log("Click");
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `/api/comments/edit/${postId}/${commentId}`,
+        {
+          commentData,
+        },
+        {
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -211,6 +294,42 @@ const postSlice = createSlice({
       state.allPost = action.payload.posts;
     },
     [dislikePost.rejected]: (state, action) => {
+      console.log(action.payload);
+    },
+    [addComment.pending]: (state) => {
+      // console.log(state)
+    },
+    [addComment.fulfilled]: (state, action) => {
+      state.allPost = action.payload.posts;
+    },
+    [addComment.rejected]: (state, action) => {
+      console.log(action.payload);
+    },
+    [deleteComment.pending]: (state) => {
+      // console.log(state)
+    },
+    [deleteComment.fulfilled]: (state, action) => {
+      state.allPost = action.payload.posts;
+    },
+    [deleteComment.rejected]: (state, action) => {
+      console.log(action.payload);
+    },
+    [editComment.pending]: (state) => {
+      // console.log(state)
+    },
+    [editComment.fulfilled]: (state, action) => {
+      state.allPost = action.payload.posts;
+    },
+    [editComment.rejected]: (state, action) => {
+      console.log(action.payload);
+    },
+    [getBookmarkPost.pending]: (state) => {
+      // console.log(state)
+    },
+    [getBookmarkPost.fulfilled]: (state, action) => {
+      state.userBookmarks = action.payload.bookmarks;
+    },
+    [getBookmarkPost.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [addPostToBookmark.pending]: (state) => {

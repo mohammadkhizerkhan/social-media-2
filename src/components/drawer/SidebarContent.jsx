@@ -31,13 +31,14 @@ function SidebarContent(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [postData, setPostData] = useState({ content: "" });
   const dispatch = useDispatch();
-  const getPostHandler = () => {
+  const getPostHandler = (onClose) => {
     if (postData.content) {
       dispatch(createPost(postData));
       setPostData({ content: "" })
     } else {
       CallToast("error", "Please write something");
     }
+    onClose();
   };
   return (
     <Box
@@ -177,7 +178,7 @@ function SidebarContent(props) {
               <Button
                 colorScheme="brand"
                 mr={3}
-                onClick={() => getPostHandler()}
+                onClick={() => getPostHandler(onClose)}
               >
                 Post
               </Button>
