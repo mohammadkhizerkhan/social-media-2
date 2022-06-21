@@ -25,7 +25,11 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineMoreVert } from "react-icons/md";
-import { deleteComment, editComment, editPost } from "../features/post/PostSlice";
+import {
+  deleteComment,
+  editComment,
+  editPost,
+} from "../features/post/PostSlice";
 import { EmailIcon } from "@chakra-ui/icons";
 import { IoCloseCircleOutline } from "react-icons/io5";
 
@@ -37,7 +41,9 @@ function CommentCard({ comment, postId }) {
   const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [commentData, setCommentData] = useState({ text: comment.text });
+  const [commentData, setCommentData] = useState({
+    text: comment.text,
+  });
   return (
     <>
       <HStack alignItems="start" w="full">
@@ -68,27 +74,27 @@ function CommentCard({ comment, postId }) {
           </Button>
           <span>{comment.text}</span>
         </Box>
-          <Menu placement="bottom-end">
-            <MenuButton
-              as={IconButton}
-              w="22px"
-              h="22px"
-              aria-label="Options"
-              icon={<MdOutlineMoreVert />}
-              variant="outline"
-              display={username === user.username ? "flex" : "none"}
-            />
-            <MenuList>
-              <MenuItem onClick={onOpen}>Edit</MenuItem>
-              <MenuItem
-                onClick={() =>
-                  dispatch(deleteComment({ postId, commentId: _id }))
-                }
-              >
-                Delete
-              </MenuItem>
-            </MenuList>
-          </Menu>
+        <Menu placement="bottom-end">
+          <MenuButton
+            as={IconButton}
+            w="22px"
+            h="22px"
+            aria-label="Options"
+            icon={<MdOutlineMoreVert />}
+            variant="outline"
+            display={username === user.username ? "flex" : "none"}
+          />
+          <MenuList>
+            <MenuItem onClick={onOpen}>Edit</MenuItem>
+            <MenuItem
+              onClick={() =>
+                dispatch(deleteComment({ postId, commentId: _id }))
+              }
+            >
+              Delete
+            </MenuItem>
+          </MenuList>
+        </Menu>
       </HStack>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -102,10 +108,7 @@ function CommentCard({ comment, postId }) {
                 minHeight="120px"
                 value={commentData.text}
                 onChange={(e) =>
-                  setCommentData((prev) => ({
-                    ...prev,
-                    text: e.target.value,
-                  }))
+                  setCommentData((prev) => ({ ...prev, text: e.target.value }))
                 }
               />
             </HStack>
@@ -116,7 +119,7 @@ function CommentCard({ comment, postId }) {
               mr={3}
               disabled={comment.text === commentData.text ? true : false}
               onClick={() => {
-                dispatch(editComment({ postId,commentId:_id,commentData}));
+                dispatch(editComment({ postId, commentId: _id, commentData }));
                 onClose();
               }}
             >
