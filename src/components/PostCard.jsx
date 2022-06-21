@@ -49,7 +49,15 @@ import {
 import { FaSadCry } from "react-icons/fa";
 
 export default function PostCard({ post }) {
-  const { comments, content, username, userId, _id, likes, bookmark } = post;
+  const { comments, content, username, userId, _id, likes, createdAt } = post;
+  const date = new Date(createdAt);
+  const [month, day, year, hour, minutes] = [
+    date.getMonth(),
+    date.getDate(),
+    date.getFullYear(),
+    date.getHours(),
+    date.getMinutes(),
+  ];
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -103,7 +111,7 @@ export default function PostCard({ post }) {
                 fontSize="sm"
                 color={useColorModeValue("gray.600", "gray.400")}
               >
-                Mar 10, 2019
+                {`${day}/${month}/${year}`} {`${hour}:${minutes}`}
               </Text>
             </VStack>
           </HStack>
@@ -197,7 +205,7 @@ export default function PostCard({ post }) {
           </HStack>
           <VStack mt={3} alignItems="start">
             {comments.map((comment) => (
-              <CommentCard comment={comment} postId={_id}/>
+              <CommentCard comment={comment} postId={_id} />
             ))}
           </VStack>
         </Box>
