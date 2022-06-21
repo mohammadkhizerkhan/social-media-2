@@ -12,7 +12,7 @@ function Explore() {
       setFilteredPosts((prev)=>({...prev,posts:[...allPost]?.sort((postA,postB)=>postB.likes.likeCount-postA.likes.likeCount)}))
     }
     else{
-      setFilteredPosts(prev=>({...prev,posts:[...allPost]?.sort((postA,postB)=>new Date(postA.createdAt)-new Date(postB.createdAt))}))
+      setFilteredPosts(prev=>({...prev,posts:[...allPost]?.sort((postA,postB)=>new Date(postB.createdAt)-new Date(postA.createdAt))}))
     }
   }, [allPost,latestPost])
   
