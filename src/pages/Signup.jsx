@@ -127,10 +127,6 @@ function Signup() {
           </Button>
         </SimpleGrid>
       </Box>
-      <chakra.p fontSize="xs" textAlign="center" color="gray.600">
-        By signing up you agree to our{" "}
-        <chakra.a color="brand.500">Terms of Service</chakra.a>
-      </chakra.p>
     </GridItem>
   );
 }

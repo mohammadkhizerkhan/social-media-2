@@ -12,6 +12,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import {useNavigate} from "react-router-dom"
+import { IoSunnyOutline,IoMoonOutline } from "react-icons/io5";
 
 import { MdOutlineSearch } from "react-icons/md";
 import { useDispatch } from "react-redux";
@@ -30,6 +31,7 @@ function Navbar() {
       borderColor={useColorModeValue("inherit", "gray.700")}
       h="14"
       w="full"
+      mt="10px"
     >
       <Flex
         // position="fixed"
@@ -44,7 +46,12 @@ function Navbar() {
           mr={4}
           type="button"
         >
-          {colorMode === "light" ? "dark mode" : "light mode"}
+          <Icon
+              as={colorMode==="light"?IoSunnyOutline:IoMoonOutline}
+              w="22px"
+              h="22px"
+            />
+          {/* {colorMode === "light" ? "dark mode" : "light mode"} */}
         </Button>
         <Button colorScheme="brand" py={2} mr={4} onClick={()=>dispatch(logoutUser({navigate}))}>
           logout
