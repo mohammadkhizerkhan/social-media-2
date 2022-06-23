@@ -215,8 +215,9 @@ function ProfileCard({ user, userPost }) {
                 </Button>
               </Flex>
               <Link
-                color={useColorModeValue("gray.600", "gray.400")}
+                color={useColorModeValue("blue.500", "blue.400")}
                 href={user.link}
+                fontWeight="bold"
               >
                 {user?.link}
               </Link>

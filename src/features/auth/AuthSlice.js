@@ -79,6 +79,7 @@ export const followUser = createAsyncThunk(
           },
         }
       );
+      CallToast("success", "Followed successfully");
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -100,6 +101,7 @@ export const unFollowUser = createAsyncThunk(
           },
         }
       );
+      CallToast("success", "Unfollowed successfully");
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -122,9 +124,10 @@ const authSlice = createSlice({
   },
   extraReducers: {
     [signUpUser.pending]: (state) => {
-      console.log(state);
+      state.isLoading=true
     },
     [signUpUser.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.token = action.payload.encodedToken;
       state.user = action.payload.createdUser;
       localStorage.setItem("token", state.token);
@@ -140,9 +143,10 @@ const authSlice = createSlice({
       );
     },
     [loginUser.pending]: (state) => {
-      console.log(state);
+      state.isLoading=true
     },
     [loginUser.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.token = action.payload.encodedToken;
       state.user = action.payload.foundUser;
       localStorage.setItem("token", state.token);
@@ -159,11 +163,12 @@ const authSlice = createSlice({
       );
     },
     [updateUser.pending]: (state) => {
-      console.log(state);
+      state.isLoading=true
     },
     [updateUser.fulfilled]: (state, action) => {
       state.user = action.payload.user;
       localStorage.setItem("user", JSON.stringify(state.user));
+      CallToast("success", "Updated successfully");
     },
     [updateUser.rejected]: (state, action) => {
       state.error = action.payload;
@@ -174,6 +179,7 @@ const authSlice = createSlice({
     [followUser.fulfilled]: (state, action) => {
       state.isLoading=false;
       state.user=action.payload.user;
+      
     },
     [followUser.rejected]: (state, action) => {
       state.error=action.payload
@@ -184,6 +190,7 @@ const authSlice = createSlice({
     [unFollowUser.fulfilled]: (state, action) => {
       state.isLoading=false;
       state.user=action.payload.user;
+      
     },
     [unFollowUser.rejected]: (state, action) => {
       state.error=action.payload
