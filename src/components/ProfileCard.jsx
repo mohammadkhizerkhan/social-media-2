@@ -71,7 +71,7 @@ function ProfileCard({ user, userPost }) {
                 fontSize="sm"
                 color={useColorModeValue("gray.600", "gray.400")}
               >
-                @{user?.firstName}
+                @{user?.userId}
               </p>
               <Button
                 w="fit-content"
