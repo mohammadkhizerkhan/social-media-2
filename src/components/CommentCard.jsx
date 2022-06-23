@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   chakra,
   Box,
@@ -41,8 +41,11 @@ function CommentCard({ comment, postId }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [commentData, setCommentData] = useState({
-    text: "",
+    text:"",
   });
+  useEffect(() => {
+    setCommentData(prev=>({...prev,text:comment.text}))
+  }, [comment])
   return (
     <>
       <HStack alignItems="start" w="full">
@@ -116,7 +119,7 @@ function CommentCard({ comment, postId }) {
             <Button
               colorScheme="brand"
               mr={3}
-              disabled={commentData.text ? false : true}
+              disabled={comment.text=== commentData.text ? true : false}
               onClick={() => {
                 dispatch(editComment({ postId, commentId: _id, commentData }));
                 onClose();
