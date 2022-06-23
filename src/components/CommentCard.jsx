@@ -30,8 +30,7 @@ import {
   editComment,
   editPost,
 } from "../features/post/PostSlice";
-import { EmailIcon } from "@chakra-ui/icons";
-import { IoCloseCircleOutline } from "react-icons/io5";
+
 
 function CommentCard({ comment, postId }) {
   const { username, _id } = comment;
@@ -42,7 +41,7 @@ function CommentCard({ comment, postId }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [commentData, setCommentData] = useState({
-    text: comment.text,
+    text: "",
   });
   return (
     <>
@@ -104,7 +103,7 @@ function CommentCard({ comment, postId }) {
           <ModalBody>
             <HStack alignItems="start">
               <Textarea
-                placeholder="write something here..."
+                placeholder="write your comment here..."
                 minHeight="120px"
                 value={commentData.text}
                 onChange={(e) =>
@@ -117,7 +116,7 @@ function CommentCard({ comment, postId }) {
             <Button
               colorScheme="brand"
               mr={3}
-              disabled={comment.text === commentData.text ? true : false}
+              disabled={commentData.text ? false : true}
               onClick={() => {
                 dispatch(editComment({ postId, commentId: _id, commentData }));
                 onClose();
