@@ -5,6 +5,7 @@ const initialState = {
   allPost: [],
   userPost: [],
   userBookmarks: [],
+  isLoading:false
 };
 
 export const getAllPosts = createAsyncThunk(
@@ -14,7 +15,7 @@ export const getAllPosts = createAsyncThunk(
       const response = await axios.get("/api/posts");
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -25,7 +26,7 @@ export const getUserPost = createAsyncThunk(
       const response = await axios.get(`/api/posts/user/${username}`);
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -42,7 +43,7 @@ export const createPost = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -56,7 +57,7 @@ export const deletePost = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -90,7 +91,7 @@ export const likePost = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      console.log(error);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -106,7 +107,7 @@ export const dislikePost = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      console.log(error);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -124,7 +125,7 @@ export const addPostToBookmark = createAsyncThunk(
       console.log(response.data);
       return response.data;
     } catch (error) {
-      console.log(error);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -139,7 +140,7 @@ export const getBookmarkPost = createAsyncThunk(
       console.log(response.data)
       return response.data
     } catch (error) {
-      console.log(error);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -155,7 +156,7 @@ export const removePostFromBookmark = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      console.log(error);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -163,7 +164,6 @@ export const removePostFromBookmark = createAsyncThunk(
 export const addComment = createAsyncThunk(
   "post/addComment",
   async ({ postId, commentData }, thunkAPI) => {
-    // console.log(commentData)
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
@@ -179,7 +179,7 @@ export const addComment = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      console.log(error);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -199,14 +199,13 @@ export const deleteComment = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 export const editComment = createAsyncThunk(
   "post/editComment",
   async ({ postId, commentId, commentData }, thunkAPI) => {
-    console.log("Click");
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
@@ -220,10 +219,9 @@ export const editComment = createAsyncThunk(
           },
         }
       );
-      console.log(response.data);
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -234,117 +232,131 @@ const postSlice = createSlice({
   reducers: {},
   extraReducers: {
     [getAllPosts.pending]: (state) => {
-      // console.log(state)
+      state.isLoading=true;
     },
     [getAllPosts.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.allPost = action.payload.posts;
     },
     [getAllPosts.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [getUserPost.pending]: (state) => {
-      // console.log(state)
+      state.isLoading=true;
     },
     [getUserPost.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.userPost = action.payload.posts;
     },
     [getUserPost.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [createPost.pending]: (state) => {
-      // console.log(state)
+      state.isLoading=true;
     },
     [createPost.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.allPost = action.payload.posts;
     },
     [createPost.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [deletePost.pending]: (state) => {
-      // console.log(state)
+      state.isLoading=true;
     },
     [deletePost.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.allPost = action.payload.posts;
     },
     [deletePost.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [editPost.pending]: (state) => {
-      // console.log(state)
+      state.isLoading=true;
     },
     [editPost.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.allPost = action.payload.posts;
     },
     [editPost.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [likePost.pending]: (state) => {
-      // console.log(state)
+      state.isLoading=true;
     },
     [likePost.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.allPost = action.payload.posts;
     },
     [likePost.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [dislikePost.pending]: (state) => {
-      // console.log(state)
+      state.isLoading=true;
     },
     [dislikePost.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.allPost = action.payload.posts;
     },
     [dislikePost.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [addComment.pending]: (state) => {
-      // console.log(state)
+      state.isLoading=true;
     },
     [addComment.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.allPost = action.payload.posts;
     },
     [addComment.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [deleteComment.pending]: (state) => {
-      // console.log(state)
+      state.isLoading=true;
     },
     [deleteComment.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.allPost = action.payload.posts;
     },
     [deleteComment.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [editComment.pending]: (state) => {
-      // console.log(state)
+      state.isLoading=true;
     },
     [editComment.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.allPost = action.payload.posts;
     },
     [editComment.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [getBookmarkPost.pending]: (state) => {
-      // console.log(state)
+      state.isLoading=true;
     },
     [getBookmarkPost.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.userBookmarks = action.payload.bookmarks;
     },
     [getBookmarkPost.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [addPostToBookmark.pending]: (state) => {
-      // console.log(state)
+      state.isLoading=true;
     },
     [addPostToBookmark.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.userBookmarks = action.payload.bookmarks;
+
     },
     [addPostToBookmark.rejected]: (state, action) => {
       console.log(action.payload);
     },
     [removePostFromBookmark.pending]: (state) => {
-      // console.log(state)
+      state.isLoading=true;
     },
     [removePostFromBookmark.fulfilled]: (state, action) => {
+      state.isLoading=false;
       state.userBookmarks = action.payload.bookmarks;
     },
     [removePostFromBookmark.rejected]: (state, action) => {
